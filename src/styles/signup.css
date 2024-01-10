@@ -1,0 +1,63 @@
+.splash-signup-container {
+    display: flex;
+}
+.logo-progress-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.logo {
+    font-weight: 700;
+}
+.progress {
+    gap: 5px;
+    display: flex;
+}
+span {
+    width: 50px;
+    height: 7px;
+    border-radius: 10px;
+    background: #dddcdc;
+}
+.splash {
+    padding: 25px;
+    text-align: center;
+    border-right: 1px solid #dddcdc;
+    flex: 0 1 40%;
+}
+.splash img {
+    width: 300px;
+}
+.signup-container, .interests, .role {
+    text-align: center;
+    padding: 50px 170px;
+    flex: 1;
+}
+.google {
+    display: block;
+    text-decoration: none;
+    width: 100%;
+    outline: 1px solid #5a5959;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    color: #000;
+}
+form input {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #dddcdc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+input[type="submit"] {
+    background-color: #7140C1;
+    color: #fff;
+}
+.skip {
+    background: #fff !important;
+    color: #000 !important;
+    border: none;
+}
