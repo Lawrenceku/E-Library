@@ -13,6 +13,11 @@ header {
     color: #929297;
     margin: 0;
 }
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 .actions .search {
     padding: 15.5px 19px;
     width: 350px;
@@ -28,4 +33,10 @@ header {
     outline: none;
     width: 90%;
     box-sizing: border-box;
+}
+.actions .user {
+    border-radius: 100%;
+    background: #645E5E;
+    color: #fff;
+    padding: 10px;
 }

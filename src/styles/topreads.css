@@ -18,7 +18,7 @@
 .read-container {
     padding-bottom: 120%;
     border-radius: 5px;
-    background: url(), lightgray 50% / cover no-repeat;
+    background: url(''), lightgray 50% / cover no-repeat;
 }
 .topread .rank {
     position: absolute;

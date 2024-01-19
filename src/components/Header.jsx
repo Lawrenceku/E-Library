@@ -1,3 +1,5 @@
+import NotificationIcon from '../images/notification.svg';
+import SearchIcon from '../images/search-normal.svg';
 import '../styles/header.css';
 
 const Header = () => {
@@ -10,11 +12,15 @@ const Header = () => {
 
             <div className="actions">
                 <div className="search">
-                    <span>Q</span>
+                    <img src={SearchIcon} alt="" />
                     <input type="search" name="" id="" />
                 </div>
-                <div className="notification"></div>
-                <div className="user"></div>
+                <div className="notification">
+                    <img src={NotificationIcon} alt="" />
+                </div>
+                <div className="user">
+                    DA
+                </div>
             </div>
         </header>
     )

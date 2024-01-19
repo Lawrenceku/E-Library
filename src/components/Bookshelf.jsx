@@ -1,3 +1,5 @@
+import UserIcon from '../images/users.svg';
+import StarIcon from '../images/star.svg';
 import '../styles/bookshelf.css';
 
 const Books = [
@@ -61,8 +63,14 @@ const Book = ({ image, category, users, rating, title, description }) => {
             <div className="meta">
                 <span className='category'>{category}</span>
                 <div className="users-rating">
-                    <span className='users'>{users}</span>
-                    <span className="rating">⭐{rating}</span>
+                    <span className='users'>
+                        <img src={UserIcon} alt="" />
+                        {users}
+                    </span>
+                    <span className="rating">
+                        <img src={StarIcon} alt="" />
+                        {rating}
+                    </span>
                 </div>
             </div>
             <p className="title">{title}</p>

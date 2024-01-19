@@ -15,8 +15,18 @@
     display: flex;
     justify-content: space-between;
 }
+.brand-role .brand span {
+    color: #180E29;
+    font-size: 25px;
+    padding-left: 5px;
+}
+.brand-role .role {
+    padding: 10px 11px 6px;
+    background: #EDEDED;
+    border-radius: 100%;
+}
 ul.links {
-    padding: 50px 0px 0px;
+    padding: 30px 0px 0px;
     margin: 0;
 }
 ul.quick-action {
@@ -24,27 +34,38 @@ ul.quick-action {
     margin: 0;
 }
 ul.links li, ul.quick-action li {
-    padding: 0;
+    padding: 0 15px;
+    border-radius: 5px;
+    display: flex;
     list-style-type: none;
 }
 ul.links li a, ul.quick-action li a {
     display: block;
+    flex: 1;
     padding: 10px 24px;
     margin: 5px 0px;
-    border-radius: 5px;
     text-decoration: none;
     color: #747479;
 }
-ul.links li a:hover, ul.links li a.active,
-ul.quick-action li a:hover {
+ul.links li:hover, ul.links li.active,
+ul.quick-action li:hover {
     color: #7140C1;
     background: rgba(113, 64, 193, 0.15);
 }
+ul li.active a, ul li a:hover {
+    color: #7140C1;
+}
 .ai {
     padding: 30px 18px;
-    margin-top: 30px;
+    margin-top: 15px;
     border-radius: 7px;
     background: rgba(113, 64, 193, 0.09);
+}
+.ai-icon {
+    display: inline-block;
+    padding: 5px 5px 2px;
+    border-radius: 70px;
+    background: rgba(113, 64, 193, 0.20);
 }
 .ai .title {
     font-size: 24px;

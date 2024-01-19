@@ -53,6 +53,16 @@
     border-radius: 20.09px;
     background: #EFEFEF;
 }
+.book .users {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.book .rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 .book .meta .users-rating {
     display: flex;
     padding: 6px 10px;
@@ -64,6 +74,7 @@
 }
 .book .title {
     color: #2D2D2D;
+    margin: 0;
     font-size: 18px;
     font-weight: 700;
     line-height: normal;
@@ -75,6 +86,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+    margin-top: 0;
     color: #747479;
     text-overflow: ellipsis;
     font-size: 14px;
