@@ -1,0 +1,31 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+}
+.hello .title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+.hello .sub-title {
+    color: #929297;
+    margin: 0;
+}
+.actions .search {
+    padding: 15.5px 19px;
+    width: 350px;
+    align-items: center;
+    border-radius: 87px;
+    border: 1px solid #E1E1E1;
+    background: #FCFCFC;
+}
+.actions input {
+    margin-left: 15px;
+    border: none;
+    background: #FCFCFC;
+    outline: none;
+    width: 90%;
+    box-sizing: border-box;
+}

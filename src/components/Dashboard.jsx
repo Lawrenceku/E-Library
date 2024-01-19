@@ -1,11 +1,22 @@
-import { Link } from 'react-router-dom';
-
+import Sidebar from './Sidebar';
+import Header from './Header';
+import Hero from './Hero';
+import Bookshelf from './Bookshelf';
+import TopRead from './TopRead';
+import Recommended from './Recommended';
+import '../styles/dashboard.css';
 
 const Dashboard = () => {
     return (
         <div className="dashboard">
-            <h1>Welcome to your Dashboard</h1>
-            <Link to="/signup">Sign Up</Link>
+            <Sidebar />
+            <div className="dashboard-main">
+                <Header />
+                <Hero />
+                <Bookshelf />
+                <TopRead />
+                <Recommended />
+            </div>
         </div>
     )
 };

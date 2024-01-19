@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import '../styles/signup.css';
 
-const Role = ({ setProgress }) => {
+const Role = () => {
+
+    const navigate = useNavigate();
 
     const submit = (e) => {
         e.preventDefault();
         // Firebase backend logic
-        setProgress(4);
+        navigate('/dashboard');
     };
 
     return (
