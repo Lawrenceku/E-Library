@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 
 const SignupForm = ({ setProgress }) => {
@@ -21,7 +22,7 @@ const SignupForm = ({ setProgress }) => {
                 <input placeholder='Password' type="password" name="" id="" />
                 <input placeholder='Confirm password' type="password" name="" id="" />
                 <input type="submit" value="Continue" />
-                <p>Alredy have an account? <a href="">Sign in</a></p>
+                <p>Already have an account? <Link to='/login'>Log in</Link></p>
             </form>
         </div>
     )
