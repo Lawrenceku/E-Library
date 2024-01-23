@@ -34,7 +34,9 @@
     flex: 1;
 }
 .google {
-    display: block;
+    display: flex;
+	align-items: center;
+	justify-content: center;
     text-decoration: none;
     width: 100%;
     outline: 1px solid #5a5959;
@@ -42,6 +44,9 @@
     border-radius: 5px;
     font-weight: 500;
     color: #000;
+}
+#google-logo{
+	height: 30px;
 }
 form input {
     display: block;
