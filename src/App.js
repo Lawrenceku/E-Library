@@ -5,7 +5,8 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
+//import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -18,16 +19,19 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const database = getDatabase();
 export const MyContext = createContext()
+export const dbContext = createContext()
 function App() {
   return (
     <MyContext.Provider value={app}>
+      <dbContext.Provider value={database}>
     <Routes>
       <Route path="/" element={<Signup/>} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
+    </dbContext.Provider>
     </MyContext.Provider>
   );
 }

@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 import { useEffect, useRef, useState, useContext } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { MyContext } from '../App';
+import { MyContext, dbContext } from '../App';
+import {ref, set } from "firebase/database";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,6 +11,7 @@ const provider = new GoogleAuthProvider();
 
 const SignupForm = ({ setProgress }) => {
     const app = useContext(MyContext);
+    const db = useContext(dbContext)
     const auth = getAuth(app);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -17,6 +19,7 @@ const SignupForm = ({ setProgress }) => {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [validPassword, setValidPassword] = useState('');
+    const [uid, setUid] = useState('')
     const check = "https://png.monster/wp-content/uploads/2022/01/png.monster-457.png";
     const fail = "https://t3.ftcdn.net/jpg/05/38/50/02/360_F_538500243_CgDMCSwiAbFS1agn7yveGBy3qOeEStOT.png";
     const [iconUrl, setIconUrl] = useState('');
@@ -30,8 +33,10 @@ const SignupForm = ({ setProgress }) => {
             const token = credential.accessToken;
             // The signed-in user info.
             const user = result.user;
+            setUid(user.uid)
             // IdP data available using getAdditionalUserInfo(result)
             setProgress(2);
+            
             // ...
         }).catch((error) => {
             // Handle Errors here.
@@ -68,6 +73,7 @@ const SignupForm = ({ setProgress }) => {
         }
     }, [password, confirmPassword]);
 
+
     const submit = (e) => {
         toastId.current = toast.loading("Loading...");
         e.preventDefault();
@@ -82,8 +88,11 @@ const SignupForm = ({ setProgress }) => {
                 hideProgressBar: false,
                 closeOnClick: true,
             });
-            setProgress(2);
+           setProgress(2);
             const user = userCredential.user;
+            setUid(user.uid)
+            user.displayName=firstName + ' ' + lastName
+            writeUserData(uid,firstName, lastName)
             /*   app.database().ref('users/' + user.uid).set({
             email: user.email,
             uid : user.uid,
@@ -103,6 +112,19 @@ const SignupForm = ({ setProgress }) => {
             });
         })
     }
+    function writeUserData(userId,firstName, lastName) {
+        set(ref(db, 'users/' + userId), {
+          firstName: firstName,
+          lastName: lastName
+          
+        })
+        .then(() => {
+            console.log('successful db')
+          })
+          .catch((error) => {
+            console.log('write failked')
+          });
+      }
        
     return (
         <div className="signup-container">
@@ -112,12 +134,12 @@ const SignupForm = ({ setProgress }) => {
             <div onClick={googleAuth} className='google' ><img id='google-logo' src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="" />Continue with Google</div>
             <p>OR</p>
             <form onSubmit={submit}>
-                <input onChange={(event) => setFirstName(event.target.value)} placeholder='First name' type="text" />
-                <input onChange={(event) => setLastName(event.target.value)} placeholder='Last name' type="text" />
-                <input onChange={(event) => setEmail(event.target.value)} placeholder='Email address' type="email" />
-                <input onChange={(event) => isStrongPassword(event.target.value)} placeholder='Password' type="password" name="" id="" />
+                <input required onChange={(event) => setFirstName(event.target.value)} placeholder='First name' type="text" />
+                <input required onChange={(event) => setLastName(event.target.value)} placeholder='Last name' type="text" />
+                <input required onChange={(event) => setEmail(event.target.value)} placeholder='Email address' type="email" />
+                <input required onChange={(event) => isStrongPassword(event.target.value)} placeholder='Password' type="password" name="" id="" />
                 <div className='password-container'>
-                    <input onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type="password" name="" id="" />
+                    <input required onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type="password" name="" id="" />
                     <img  id='password-icon'  src={iconUrl} alt="" />
                 </div>
                 
