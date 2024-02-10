@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 import { useEffect, useRef, useState, useContext } from 'react';
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, updateProfile ,GoogleAuthProvider } from "firebase/auth";
 import { MyContext, dbContext } from '../App';
 import {ref, set } from "firebase/database";
 import { ToastContainer, toast } from 'react-toastify';
@@ -91,7 +91,10 @@ const SignupForm = ({ setProgress }) => {
            setProgress(2);
             const user = userCredential.user;
             setUid(user.uid)
-            user.displayName=firstName + ' ' + lastName
+            updateProfile(auth.currentUser, {
+                displayName: firstName + ' ' + lastName
+            })
+
             writeUserData(uid,firstName, lastName)
             /*   app.database().ref('users/' + user.uid).set({
             email: user.email,
