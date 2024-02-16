@@ -24,7 +24,7 @@
 .publish-book label {
     font-weight: bold;
 }
-.publish-book input, .publish-book textarea {
+.publish-book input:not(input[type="submit"]), .publish-book textarea {
     width: 100%;
     padding: 13px;
     margin: 10px 0 25px;
@@ -86,6 +86,7 @@
     color: white;
     width: 50%;
     padding: 15px 0;
+    margin: 0;
     border-radius: 5px;
     border: none;
 }
