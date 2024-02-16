@@ -1,11 +1,12 @@
-import Toshokan from '../images/Toshokan.svg';
-import ArrowDownIcon from '../images/arrow-right.svg';
-import HomeIcon from '../images/home-2.svg';
-import CollectionIcon from '../images/Frame.svg';
-import PublishIcon from '../images/Book.svg';
-import ClockIcon from '../images/clock.svg';
-import SettingsIcon from '../images/setting-2.svg';
-import AIIcon from '../images/ai.svg';
+import { Link } from 'react-router-dom';
+import Toshokan from '../assets/Toshokan.svg';
+import ArrowDownIcon from '../assets/arrow-right.svg';
+import HomeIcon from '../assets/home-2.svg';
+import CollectionIcon from '../assets/Frame.svg';
+import PublishIcon from '../assets/Book.svg';
+import ClockIcon from '../assets/clock.svg';
+import SettingsIcon from '../assets/setting-2.svg';
+import AIIcon from '../assets/ai.svg';
 import '../styles/sidebar.css';
 
 const Sidebar = () => {
@@ -23,15 +24,15 @@ const Sidebar = () => {
             <ul className="links">
                 <li className='active'>
                     <img src={HomeIcon} alt="" />
-                    <a href="/">Home</a>
+                    <Link to="/">Home</Link>
                 </li>
                 <li>
                     <img src={CollectionIcon} alt="" />
-                    <a href="/">Collection</a>
+                    <Link to="/">Collection</Link>
                 </li>
                 <li>
                     <img src={PublishIcon} alt="" />
-                    <a href="">Publish book</a>
+                    <Link to="/publish">Publish book</Link>
                 </li>
             </ul>
             <p className='sub-header'>Quick action</p>

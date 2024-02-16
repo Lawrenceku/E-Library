@@ -1,5 +1,5 @@
-import NotificationIcon from '../images/notification.svg';
-import SearchIcon from '../images/search-normal.svg';
+import NotificationIcon from '../assets/notification.svg';
+import SearchIcon from '../assets/search-normal.svg';
 import '../styles/header.css';
 
 const Header = () => {

@@ -1,0 +1,107 @@
+.publish {
+    display: flex;
+}
+.publish-book {
+    flex: 1;
+    padding: 40px;
+    border-right: 1px solid #ccc;
+}
+.publish-book .form-container {
+    padding: 0 40px 40px;
+}
+.publish-book .close {
+    cursor: pointer;
+}
+.publish-book h1 {
+    font-size: 2em;
+    margin-bottom: 0;
+}
+.publish-book .muted {
+    color: #999;
+    font-size: 0.8em;
+    margin: 0 0 20px;
+}
+.publish-book label {
+    font-weight: bold;
+}
+.publish-book input, .publish-book textarea {
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.publish-book .label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 50px;
+}
+.publish-book .label p {
+    font-size: 25px;
+    margin: 0;
+    font-weight: bold;
+}
+.publish-book .label span {
+    color: #999;
+}
+.publish .action {
+    display: inline-flex;
+    align-items: center;
+    background: white;
+    gap: 5px;
+    color: blueviolet;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.publish-book .collection {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border: 1px dotted #ccc;
+}
+.publish-book .collection span {
+    color: #999;
+    font-size: 0.8em;
+}
+.publish-book .button-group {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    margin-top: 50px;
+}
+.publish-book button {
+    cursor: pointer;
+}
+.publish-book .draft-button {
+    background: white;
+    border: 1px solid #000;
+    width: 50%;
+    padding: 15px 0;
+    border-radius: 5px;
+}
+.publish-book .publish-button {
+    background: blueviolet;
+    color: white;
+    width: 50%;
+    padding: 15px 0;
+    border-radius: 5px;
+    border: none;
+}
+.publish-preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    flex: 1;
+    padding: 50px;
+}
+.publish-preview .action {
+    margin-top: 20px;
+}
+.publish-preview .preview-text p {
+    text-align: center;
+    margin: 0;
+}

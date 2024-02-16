@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import Toshokan from '../images/Toshokan.svg';
-import splash1 from '../images/splash1.svg';
-import splash2 from '../images/splash2.svg';
-import splash3 from '../images/splash3.svg';
+import Toshokan from '../assets/Toshokan.svg';
+import splash1 from '../assets/splash1.svg';
+import splash2 from '../assets/splash2.svg';
+import splash3 from '../assets/splash3.svg';
 
 const SplashScreen = ({ progress }) => {
     const images = [splash1, splash2, splash3];

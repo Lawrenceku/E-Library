@@ -1,4 +1,4 @@
-import RevenueIcon from '../images/revenues.svg';
+import RevenueIcon from '../assets/revenues.svg';
 import '../styles/hero.css';
 
 const Hero = () => {

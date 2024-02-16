@@ -1,5 +1,5 @@
-import UserIcon from '../images/users.svg';
-import StarIcon from '../images/star.svg';
+import UserIcon from '../assets/users.svg';
+import StarIcon from '../assets/star.svg';
 import '../styles/bookshelf.css';
 
 const Books = [
