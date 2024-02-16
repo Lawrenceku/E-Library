@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SplashScreen from './SplashScreen';
 import SignupForm from './SignupForm';
 import Interests from './Interests';
 import Role from './Role';
 import '../styles/signup.css';
-// import { MyContext } from '../App';
+import { MyContext } from '../App';
 
 const Signup = () => {
-    // const app = useContext(MyContext)
+    const app = useContext(MyContext)
     const navigate = useNavigate();
     const [progress, setProgress] = useState(1)
 
@@ -16,16 +16,16 @@ const Signup = () => {
         if (progress > 3) {
             navigate('/');
         }
-    }, [progress, navigate])
+    }, [progress])
 
     return (
         <div className="signup">
             <div className="splash-signup-container">
                 <SplashScreen progress={progress} />
                 {
-                    progress === 1 ?
+                    progress == 1 ?
                     <SignupForm setProgress={setProgress} />
-                    : progress === 2 ?
+                    : progress == 2 ?
                     <Interests setProgress={setProgress} />
                     :
                     <Role />
