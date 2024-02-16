@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 import { MyContext } from '../App';
 import { useRef, useContext, useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 
 const provider = new GoogleAuthProvider();

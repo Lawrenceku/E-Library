@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import SplashScreen from './SplashScreen';
 import LoginForm from './LoginForm';
-import { useEffect, useState,useContext } from 'react';
+import { useEffect, useState } from 'react';
 import '../styles/signup.css';
 
 
@@ -11,10 +11,10 @@ const Login = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        if (success == true) {
+        if (success === true) {
             navigate('/dashboard');
         }
-    }, [success])
+    }, [success, navigate])
 
     return (
         <div className="signup">

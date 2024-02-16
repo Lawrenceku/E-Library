@@ -1,13 +1,8 @@
-<<<<<<< HEAD
 import NotificationIcon from '../assets/notification.svg';
 import SearchIcon from '../assets/search-normal.svg';
-=======
-import NotificationIcon from '../images/notification.svg';
-import SearchIcon from '../images/search-normal.svg';
 import { useEffect } from 'react';
 import { getAuth} from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
->>>>>>> 832f7c352294fea39e3230cf5f20de39629d1e66
 import '../styles/header.css';
 
 const Header = () => {
