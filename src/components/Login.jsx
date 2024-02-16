@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import SplashScreen from './SplashScreen';
 import LoginForm from './LoginForm';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useContext } from 'react';
 import '../styles/signup.css';
+
 
 const Login = () => {
     const navigate = useNavigate();
