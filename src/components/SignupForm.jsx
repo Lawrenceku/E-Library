@@ -55,10 +55,9 @@ const SignupForm = ({ setProgress }) => {
         const hasLowercase = /[a-z]/.test(pass);
         const hasUppercase = /[A-Z]/.test(pass);
         const hasDigit = /\d/.test(pass);
-        const hasSpecialChar = /[@$#!%*?&]/.test(pass);
 
         // Check strength
-        if (pass.length > 8 && hasLowercase && hasUppercase && hasDigit && hasSpecialChar) {
+        if (pass.length >= 8 && hasLowercase && hasUppercase && hasDigit ) {
             setPassword(pass);
         }
     };
@@ -141,6 +140,9 @@ const SignupForm = ({ setProgress }) => {
                 <input required onChange={(event) => setLastName(event.target.value)} placeholder='Last name' type="text" />
                 <input required onChange={(event) => setEmail(event.target.value)} placeholder='Email address' type="email" />
                 <input required onChange={(event) => isStrongPassword(event.target.value)} placeholder='Password' type="password" name="" id="" />
+                <div id='password-requirements'>
+                <span >{/*Your password must be at least 8 characters long  and contain at least one lowercase letter, one uppercase letter, one digit. */}</span>
+                </div>
                 <div className='password-container'>
                     <input required onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type="password" name="" id="" />
                     <img  id='password-icon'  src={iconUrl} alt="" />

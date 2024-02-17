@@ -1,21 +1,26 @@
+import { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 import NotificationIcon from '../assets/notification.svg';
 import SearchIcon from '../assets/search-normal.svg';
-import { useEffect } from 'react';
-import { getAuth} from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
 import '../styles/header.css';
 
 const Header = () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Perform navigation when user is null
-        if (!user) {
-            navigate('/');
-        }
-    }, [user, navigate]);
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+            // Perform navigation when user is null
+            if (!user) {
+                navigate('/');
+            }
+        });
+
+        return () => unsubscribe(); // Cleanup function
+    }, [navigate]);
 
     // Render nothing if user is null and navigation is in progress
     if (!user) {
