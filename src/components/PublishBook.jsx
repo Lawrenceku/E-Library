@@ -1,5 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+import { dbContext, storageContext, AuthContext} from '../App';
+import { useDropzone } from 'react-dropzone';
+import { collection, addDoc } from "firebase/firestore"; 
 import '../styles/publishbook.css';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
 import Close from '../assets/close.svg';
 import Add from '../assets/add.svg';
 import Books from '../assets/books.svg';
@@ -7,8 +11,19 @@ import { useNavigate } from 'react-router-dom';
 
 const PublishBook = () => {
     const navigate = useNavigate();
-
+    const db = useContext(dbContext);
+    const storage = useContext(storageContext);
+    const currentUser = useContext(AuthContext)
     const fileInputRef = useRef(null);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const userId = currentUser.uid;
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: (acceptedFiles) => {
+            setUploadedFiles(acceptedFiles);
+            handleFileInputChange(acceptedFiles[0]);
+        },
+        multiple: false
+    });
 
     const [formData, setFormData] = useState({
         title: "",
@@ -16,6 +31,7 @@ const PublishBook = () => {
         genre: "",
         file: null,
         price: "",
+        userId: currentUser.uid, 
     });
 
     const handleInputChange = (event) => {
@@ -26,8 +42,7 @@ const PublishBook = () => {
         });
     };
 
-    const handleFileInputChange = (event) => {
-        const file = event.target.files[0];
+    const handleFileInputChange = (file) => {
         setFormData({
             ...formData,
             file: file,
@@ -41,12 +56,22 @@ const PublishBook = () => {
     const publishBook = async (event) => {
         event.preventDefault();
         try {
-            // Make a POST request to the server
-        } catch(error) {
-            // Handle error
+            const storageRef = ref(storage, `books/${formData.file.name}`);
+            await uploadBytes(storageRef, formData.file);
+            const downloadURL = await getDownloadURL(storageRef);
+            
+            const docRef = await addDoc(collection(db, "books"), {
+                ...formData,
+                file: downloadURL // Store the download URL instead of the file itself
+            });
+            alert('done publishing')
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            alert("Error adding document: ", e)
+            console.error("Error adding document: ", e);
         }
         console.log(formData);
-    }
+    };
 
     const close = () => {
         navigate(-1);
@@ -110,8 +135,8 @@ const PublishBook = () => {
                     </form>
                 </div>
             </div>
-            <div className="publish-preview">
-                { formData.file ? (
+            <div className="publish-preview" {...getRootProps()}>
+                {formData.file ? (
                     <img src={URL.createObjectURL(formData.file)} alt="" />
                 ) : (
                     <>
@@ -120,22 +145,13 @@ const PublishBook = () => {
                             <p>A preview of your book will show here</p>
                             <p>(It can be a picture or PDF)</p>
                         </div>
-                        <button onClick={handleButtonClick} className="action">Click here to upload</button>
+                        <button onClick={handleButtonClick} className="action">Drop a file here to upload or Click here to browse</button>
                     </>
                 )}
-            </div>
-
-            <div className="bookfile">
-                <input type="file"
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
-                    onChange={handleFileInputChange}
-                    name="file"
-                    required
-                />
+                <input {...getInputProps()} type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={(e) => handleFileInputChange(e.target.files[0])} name="file" required />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PublishBook;
+export default PublishBook
