@@ -4,12 +4,16 @@ import Close from '../assets/close.svg';
 import Add from '../assets/add.svg';
 import Books from '../assets/books.svg';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const PublishBook = () => {
     const navigate = useNavigate();
 
     const fileInputRef = useRef(null);
-    const categories = useRef(null)
+    const categories = useRef(null);
+    const toastId = useRef(null);
 
     const [formData, setFormData] = useState({
         title: "",
@@ -73,7 +77,23 @@ const PublishBook = () => {
 
     const publishBook = async (event) => {
         event.preventDefault();
-        if (!formData.genre || !formData.file) return;
+        toastId.current = toast.loading("Loading...");
+        if (!formData.genre || !formData.file) {
+            if (!formData.genre) {
+                var msg = "Please select a book genre"
+            } else if (!formData.file) {
+                var msg = "Please upload a file"
+            }
+            toast.update(toastId.current, {
+                render: msg,
+                type: "error",
+                isLoading: false,
+                autoClose: 3000, //3 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+            });
+            return;
+        }
         try {
             // Make a POST request to the server
         } catch(error) {
@@ -88,6 +108,7 @@ const PublishBook = () => {
 
     return (
         <div className="publish">
+            <div className="toast-container"><ToastContainer ref={toastId} limit={2}/></div>
             <div className="publish-book">
                 <span className='close' onClick={close}>
                     <img src={Close} alt="close" />
