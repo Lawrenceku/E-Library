@@ -15,6 +15,20 @@ const PublishBook = () => {
     const categories = useRef(null);
     const toastId = useRef(null);
 
+    const genres = [
+        'Science',
+        'Mathematics',
+        'Arts',
+        'Finance',
+        'Economics',
+        'Accounting',
+        'Engineering',
+        'Tourism',
+        'Taxation',
+        'Fiction',
+        'Novel',
+    ]
+
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -140,32 +154,11 @@ const PublishBook = () => {
                         <label htmlFor="genre">Genre*</label>
                         <div ref={categories} className="select-interests">
                             <div className='categories' style={categoryStyle}>
-                                <span onClick={handleInputChange} name="genre" id="tourist attraction">Tourist Attraction</span>
-                                <span onClick={handleInputChange} name="genre" id="airport">Airport</span>
-                                <span onClick={handleInputChange} name="genre" id="amusement park">Amusement Park</span>
-                                <span onClick={handleInputChange} name="genre" id="art gallery">Art Gallery</span>
-                                <span onClick={handleInputChange} name="genre" id="bank">Bank</span>
-                                <span onClick={handleInputChange} name="genre" id="bar">Bar</span>
-                                <span onClick={handleInputChange} name="genre" id="beauty salon">Salon</span>
-                                <span onClick={handleInputChange} name="genre" id="store">Store</span>
-                                <span onClick={handleInputChange} name="genre" id="cafe">Cafe</span>
-                                <span onClick={handleInputChange} name="genre" id="casino">Casino</span>
-                                <span onClick={handleInputChange} name="genre" id="church">Church</span>
-                                <span onClick={handleInputChange} name="genre" id="gym">Gym</span>
-                                <span onClick={handleInputChange} name="genre" id="hospital">Hospital</span>
-                                <span onClick={handleInputChange} name="genre" id="library">Library</span>
-                                <span onClick={handleInputChange} name="genre" id="mosque">Mosque</span>
-                                <span onClick={handleInputChange} name="genre" id="movie">Movie</span>
-                                <span onClick={handleInputChange} name="genre" id="museum">Museum</span>
-                                <span onClick={handleInputChange} name="genre" id="night club">Night Club</span>
-                                <span onClick={handleInputChange} name="genre" id="pharmacy">Pharmacy</span>
-                                <span onClick={handleInputChange} name="genre" id="school">School</span>
-                                <span onClick={handleInputChange} name="genre" id="restaurant">Restaurant</span>
-                                <span onClick={handleInputChange} name="genre" id="shopping mall">Shopping Mall</span>
-                                <span onClick={handleInputChange} name="genre" id="stadium">Stadium</span>
-                                <span onClick={handleInputChange} name="genre" id="spa">Spa</span>
-                                <span onClick={handleInputChange} name="genre" id="university">university</span>
-                                <span onClick={handleInputChange} name="genre" id="zoo">Zoo</span>
+                                {
+                                    genres.map(genre => (
+                                        <span onClick={handleInputChange} name="genre" id={genre}>{genre}</span>
+                                    ))
+                                }
                             </div>
                             <div className='select-category' tabIndex="1" onClick={handleShowCategory}>
                                 <div className='selected'>
