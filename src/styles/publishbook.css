@@ -24,7 +24,7 @@
 .publish-book label {
     font-weight: bold;
 }
-.publish-book input:not(input[type="submit"]), .publish-book textarea {
+.publish-book input:not(input[type="submit"]), .publish-book textarea, .publish-book .select-category {
     width: 100%;
     padding: 13px;
     margin: 10px 0 25px;
@@ -55,6 +55,63 @@
     text-decoration: underline;
     cursor: pointer;
 }
+.select-interests {
+    position: relative;
+    margin: auto auto 25px;
+    scroll-margin-top: 150px;
+    transition: all 0.5s;
+    width: 100%;
+  }
+  .select-interests .categories {
+    position: absolute;
+    top: 60px;
+    padding: 13px;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    color: #474747;
+    text-align: left;
+    max-height: 400px;
+    width: 100%;
+    max-width: 500px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+  }
+  .categories::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  .categories::-webkit-scrollbar-track {
+    border-radius: 100px;
+    background-color: #b6b3b3;
+  }
+  
+  .categories::-webkit-scrollbar-thumb {
+    background-color: #636262;
+    border-radius: 100px;
+  }
+  .select-interests .categories span {
+    padding: 10px;
+    display: block;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .select-interests .categories span:hover {
+    background-color: #fff;
+  }
+  .select-category {
+    cursor: pointer;
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .selected {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+  }
 .publish-book .collection {
     display: flex;
     justify-content: center;

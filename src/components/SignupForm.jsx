@@ -147,7 +147,7 @@ const SignupForm = ({ setProgress }) => {
                 <span >{/*Your password must be at least 8 characters long  and contain at least one lowercase letter, one uppercase letter, one digit. */}</span>
                 </div>
                 <div className='password-container'>
-                    <input required onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type="password" name="" id="" />
+                    <input required onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type="password" name="" id="pwd2" />
                     <img  id='password-icon'  src={iconUrl} alt="" />
                 </div>
                 

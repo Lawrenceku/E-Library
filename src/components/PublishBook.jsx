@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef, useContext } from 'react';
 import { dbContext, AuthContext} from '../App';
 import { useDropzone } from 'react-dropzone';
@@ -10,23 +11,44 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const PublishBook = () => {
-    const toastId = useRef(null);
     const navigate = useNavigate();
     const db = useContext(dbContext);
-    //const currentUser = useContext(AuthContext)
     const fileInputRef = useRef(null);
+
     const [currentUser, setCurrentUser] = useState();
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const categories = useRef(null);
+    const toastId = useRef(null);
+    const [showCategory, setShowCategory] = useState(false);
+    const [showPrice, setShowPrice] = useState(false);
+
+    const genres = [
+        'Science',
+        'Mathematics',
+        'Arts',
+        'Finance',
+        'Economics',
+        'Accounting',
+        'Engineering',
+        'Tourism',
+        'Taxation',
+        'Fiction',
+        'Novel',
+    ];
+
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        genre: "",
+        genre: '',
         file: null,
         price: "",
-        userId: currentUser ? currentUser.uid : "", 
+        userId: currentUser ? currentUser.uid : "",
     });
+
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles) => {
             setUploadedFiles(acceptedFiles);
@@ -44,19 +66,43 @@ const PublishBook = () => {
             }
         });
 
-        return () => unsubscribe(); 
-    }, [navigate]);
+        return () => unsubscribe();
+    }, [navigate, currentUser]);
 
-    if (!currentUser) {
-        return null;
+    useEffect(() => {
+        if (showCategory) {
+            categories.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [showCategory]);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (categories.current && !categories.current.contains(event.target)) {
+                setShowCategory(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleShowCategory = () => {
+        setShowCategory(!showCategory);
+    };
+
+    const categoryStyle = {
+        visibility: showCategory ? 'visible' : 'hidden'
     }
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value, id } = event.target;
         setFormData({
             ...formData,
-            [name]: value,
+            [name ? name : "genre"]: value ? value : id,
         });
+        id && setShowCategory(!showCategory)
     };
 
     const handleFileInputChange = (file) => {
@@ -74,6 +120,23 @@ const PublishBook = () => {
         toastId.current = toast.loading('Loading...');
 
         event.preventDefault();
+        toastId.current = toast.loading("Loading...");
+        if (!formData.genre || !formData.file) {
+            if (!formData.genre) {
+                var msg = "Please select a book genre"
+            } else if (!formData.file) {
+                var msg = "Please upload a file"
+            }
+            toast.update(toastId.current, {
+                render: msg,
+                type: "error",
+                isLoading: false,
+                autoClose: 3000, //3 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+            });
+            return;
+        }
         try {
             toast.update(toastId.current, {
                 render: 'Uploaded Successfully',
@@ -109,9 +172,16 @@ const PublishBook = () => {
         navigate(-1);
     };
 
+    if (!currentUser) {
+        return null;
+    }
+
+
     return (
         <div className="publish">
+
             <div className="toast-container"><ToastContainer ref={toastId} limit={2} /></div>
+            <div className="toast-container"><ToastContainer ref={toastId} limit={2}/></div>
             <div className="publish-book">
                 <span className='close' onClick={close}>
                     <img src={Close} alt="close" />
@@ -141,14 +211,29 @@ const PublishBook = () => {
                         </textarea>
 
                         <label htmlFor="genre">Genre*</label>
-                        <input
+                        <div ref={categories} className="select-interests">
+                            <div className='categories' style={categoryStyle}>
+                                {
+                                    genres.map(genre => (
+                                        <span onClick={handleInputChange} name="genre" id={genre}>{genre}</span>
+                                    ))
+                                }
+                            </div>
+                            <div className='select-category' tabIndex="1" onClick={handleShowCategory}>
+                                <div className='selected'>
+                                    <span>{formData.genre !== "" ? formData.genre : "Select a genre"}</span>
+                                    <svg height="20" viewBox="0 0 1792 1792" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M1395 736q0 13-10 23l-466 466q-10 10-23 10t-23-10l-466-466q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l393 393 393-393q10-10 23-10t23 10l50 50q10 10 10 23z"/></svg>
+                                </div>
+                            </div>
+                            </div>
+                        {/* <input
                             type="option"
                             placeholder='Select genre'
                             name="genre"
                             value={formData.genre}
                             onChange={handleInputChange}
                             required
-                        />
+                        /> */}
 
                         <div className="label"><p>Collection</p><span>(optional)</span></div>
                         <p className="muted">To create a new collection click on <button className='action'>New collection</button></p>
@@ -158,7 +243,19 @@ const PublishBook = () => {
                         </div>
 
                         <div className="label"><p>Pricing</p><span>(optional)</span></div>
-                        <button className='action'><img src={Add} alt="" />Add price</button>
+
+
+                        {showPrice ? (
+                            <input
+                                type="number"
+                                placeholder='Enter price in NGN'
+                                name="price"
+                                value={formData.price}
+                                onChange={handleInputChange}
+                            />
+                        ) : (
+                            <button onClick={()=>{setShowPrice(true)}} className='action'><img src={Add} alt="" />Add price</button>
+                        )}
 
                         <div className="button-group">
                             <button className="draft-button">Save to draft</button>
