@@ -1,8 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect, createContext } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, setPersistence, browserSessionPersistence } from "firebase/auth";
 import { getStorage } from 'firebase/storage'; 
 import 'firebase/firestore';
 import Signup from './components/Signup';
@@ -25,6 +25,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+// Set session persistence
+setPersistence(auth, browserSessionPersistence);
+
 export const MyContext = createContext(app);
 export const dbContext = createContext(db)
 export const AuthContext = createContext();
@@ -32,10 +35,10 @@ export const storageContext = createContext(storage);
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-
+  
   useEffect(() => {
     // Assuming you have imported auth from firebase/auth
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
       setCurrentUser(user);
     });
 
@@ -43,20 +46,22 @@ function App() {
   }, []);
 
   return (
-    <AuthContext.Provider value={currentUser}>
+    
       <MyContext.Provider value={app}>
       <dbContext.Provider value={db}>
         <storageContext.Provider value={storage}>
+        <AuthContext.Provider value={currentUser}>
         <Routes>
-          <Route path="/" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/publish" element={<PublishBook />} />
         </Routes>
+        </AuthContext.Provider>
         </storageContext.Provider>
         </dbContext.Provider>
       </MyContext.Provider>
-    </AuthContext.Provider>
+    
   );
 }
 

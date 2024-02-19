@@ -1,22 +1,32 @@
-import { useState, useRef, useContext } from 'react';
-import { dbContext, storageContext, AuthContext} from '../App';
+import { useState, useEffect, useRef, useContext } from 'react';
+import { dbContext, AuthContext} from '../App';
 import { useDropzone } from 'react-dropzone';
 import { collection, addDoc } from "firebase/firestore"; 
 import '../styles/publishbook.css';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
 import Close from '../assets/close.svg';
 import Add from '../assets/add.svg';
 import Books from '../assets/books.svg';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const PublishBook = () => {
+    const toastId = useRef(null);
     const navigate = useNavigate();
     const db = useContext(dbContext);
-    const storage = useContext(storageContext);
-    const currentUser = useContext(AuthContext)
+    //const currentUser = useContext(AuthContext)
     const fileInputRef = useRef(null);
+    const [currentUser, setCurrentUser] = useState();
     const [uploadedFiles, setUploadedFiles] = useState([]);
-    const userId = currentUser.uid;
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        genre: "",
+        file: null,
+        price: "",
+        userId: currentUser ? currentUser.uid : "", 
+    });
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles) => {
             setUploadedFiles(acceptedFiles);
@@ -25,14 +35,21 @@ const PublishBook = () => {
         multiple: false
     });
 
-    const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        genre: "",
-        file: null,
-        price: "",
-        userId: currentUser.uid, 
-    });
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+            if (!currentUser) {
+                return null
+            }
+        });
+
+        return () => unsubscribe(); 
+    }, [navigate]);
+
+    if (!currentUser) {
+        return null;
+    }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -54,23 +71,38 @@ const PublishBook = () => {
     };
 
     const publishBook = async (event) => {
+        toastId.current = toast.loading('Loading...');
+
         event.preventDefault();
         try {
-            const storageRef = ref(storage, `books/${formData.file.name}`);
-            await uploadBytes(storageRef, formData.file);
-            const downloadURL = await getDownloadURL(storageRef);
-            
-            const docRef = await addDoc(collection(db, "books"), {
-                ...formData,
-                file: downloadURL // Store the download URL instead of the file itself
+            toast.update(toastId.current, {
+                render: 'Uploaded Successfully',
+                type: 'success',
+                isLoading: false,
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
             });
-            alert('done publishing')
+            const docRef = await addDoc(collection(db, "books"), {
+                ...formData
+            });
+            
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
-            alert("Error adding document: ", e)
+            
             console.error("Error adding document: ", e);
+            const errorMessage = e.message;
+            toast.update(toastId.current, {
+                render: errorMessage,
+                type: 'error',
+                isLoading: false,
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+            });
         }
         console.log(formData);
+
     };
 
     const close = () => {
@@ -79,6 +111,7 @@ const PublishBook = () => {
 
     return (
         <div className="publish">
+            <div className="toast-container"><ToastContainer ref={toastId} limit={2} /></div>
             <div className="publish-book">
                 <span className='close' onClick={close}>
                     <img src={Close} alt="close" />

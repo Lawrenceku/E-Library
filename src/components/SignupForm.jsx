@@ -24,10 +24,11 @@ const SignupForm = ({ setProgress }) => {
     const fail = "https://t3.ftcdn.net/jpg/05/38/50/02/360_F_538500243_CgDMCSwiAbFS1agn7yveGBy3qOeEStOT.png";
     const [iconUrl, setIconUrl] = useState('');
     const toastId = useRef(null);
+    
 
-    const googleAuth = () => {
-        signInWithPopup(auth, provider)
-        .then((result) => {
+    const googleAuth = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
             // This gives you a Google Access Token. You can use it to access the Google API.
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
@@ -36,9 +37,10 @@ const SignupForm = ({ setProgress }) => {
             setUid(user.uid)
             // IdP data available using getAdditionalUserInfo(result)
             setProgress(2);
-            
-            // ...
-        }).catch((error) => {
+    
+            const idToken = await user.getIdToken(); // Get the Firebase ID token
+            console.log(idToken);
+        } catch (error) {
             // Handle Errors here.
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -47,8 +49,9 @@ const SignupForm = ({ setProgress }) => {
             // The AuthCredential type that was used.
             const credential = GoogleAuthProvider.credentialFromError(error);
             // ...
-        });
-    }
+        }
+    };
+    
 
     const isStrongPassword = (pass) => {
         // Check for lowercase, uppercase, digit, and special character
