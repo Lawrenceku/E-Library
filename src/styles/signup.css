@@ -60,6 +60,17 @@
     position: absolute;
     left: 87%;
 }
+#password-requirements {
+    color: grey;
+    font-size: small;
+    width: 100%; 
+    display: inline;
+    flex-shrink: 0;
+}
+
+#password-requirements  span{
+display: inline;
+}
 form input {
     display: block;
     width: 100%;
