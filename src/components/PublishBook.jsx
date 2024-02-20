@@ -61,10 +61,7 @@ const PublishBook = () => {
             const selectedFile = acceptedFiles[0];
             if (selectedFile.type === "application/pdf") {
                 setFile(selectedFile);
-                setFormData({
-                    ...formData,
-                    file: selectedFile,
-                });
+                
             } else {
                 toast.error("Please upload a PDF file");
             }
@@ -80,11 +77,7 @@ const PublishBook = () => {
             setCurrentUser(user);
         });
     
-        return unsubscribe;
-    }, []); // Remove dependencies to ensure it runs only once
-    
-    
-
+        // Clean up function to unsubscribe when component unmounts
         return () => unsubscribe();
     }, [navigate, currentUser]);
 
@@ -108,15 +101,15 @@ const PublishBook = () => {
 
         try {
             const docRef = await addDoc(collection(db, "usersBooks"), {
-                ...formData,
-                fileURL: "", // Placeholder for the file URL, you need to replace this with the actual URL after upload
+                ...formData
+                // Placeholder for the file URL, you need to replace this with the actual URL after upload
             });
 
             // Upload file to storage
             const storageRef = ref(storage, `/usersBooks/${docRef.id}`);
             await uploadBytes(storageRef, file);
 
-          const downloadURL = await getDownloadURL(storageRef);
+            const downloadURL = await getDownloadURL(storageRef);
 
         // Update the Firestore document with the download URL
         await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
@@ -151,27 +144,21 @@ const PublishBook = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileInputChange = (files) => {
-        if (files && files.length > 0) {
-            const selectedFile = files[0];
-            if (selectedFile.type === "application/pdf") {
-                setFile(selectedFile);
-                setFormData({
-                    ...formData,
-                    file: selectedFile,
-                });
-            } else {
-                toast.error("Please upload a PDF file");
-            }
+const handleFileInputChange = (files) => {
+    console.log(files)
+    if (files && files.length > 0) {
+        const selectedFile = files[0];
+        if (selectedFile.type === "application/pdf") {
+            setFile(selectedFile);
         } else {
-            // Handle case where no files are selected
-            toast.error("Please select a file");
+            toast.error("Please upload a PDF file");
         }
-    };
-    
-    
-    
+    } else {
+        // Handle case where no files are selected
+        toast.error("Please select a file");
+    }
 
+};
     if (!currentUser) {
         return null;
     }
