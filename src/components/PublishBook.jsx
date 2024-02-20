@@ -1,12 +1,13 @@
 
 import { useState, useEffect, useRef, useContext } from 'react';
-import { dbContext, AuthContext} from '../App';
+import { dbContext, storageContext, AuthContext} from '../App';
 import { useDropzone } from 'react-dropzone';
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc,doc, updateDoc} from "firebase/firestore"; 
 import '../styles/publishbook.css';
 import Close from '../assets/close.svg';
 import Add from '../assets/add.svg';
 import Books from '../assets/books.svg';
+import { ref, uploadBytes,getDownloadURL  } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,16 +16,23 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const PublishBook = () => {
-    const navigate = useNavigate();
+ const navigate = useNavigate();
     const db = useContext(dbContext);
+    const storage = useContext(storageContext);
     const fileInputRef = useRef(null);
 
     const [currentUser, setCurrentUser] = useState();
-    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [file, setFile] = useState(null);
     const categories = useRef(null);
     const toastId = useRef(null);
     const [showCategory, setShowCategory] = useState(false);
+    const [price, setPrice] = useState()
     const [showPrice, setShowPrice] = useState(false);
+
+  const categoryStyle = {
+        visibility: showCategory ? 'visible' : 'hidden'
+    };
+
 
     const genres = [
         'Science',
@@ -44,15 +52,13 @@ const PublishBook = () => {
         title: "",
         description: "",
         genre: '',
-        file: null,
-        price: "",
+        price: price? price: '0',
         userId: currentUser ? currentUser.uid : "",
     });
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles) => {
-            setUploadedFiles(acceptedFiles);
-            handleFileInputChange(acceptedFiles[0]);
+            setFile(acceptedFiles[0]);
         },
         multiple: false
     });
@@ -69,33 +75,6 @@ const PublishBook = () => {
         return () => unsubscribe();
     }, [navigate, currentUser]);
 
-    useEffect(() => {
-        if (showCategory) {
-            categories.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [showCategory]);
-
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (categories.current && !categories.current.contains(event.target)) {
-                setShowCategory(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const handleShowCategory = () => {
-        setShowCategory(!showCategory);
-    };
-
-    const categoryStyle = {
-        visibility: showCategory ? 'visible' : 'hidden'
-    }
-
     const handleInputChange = (event) => {
         const { name, value, id } = event.target;
         setFormData({
@@ -105,72 +84,67 @@ const PublishBook = () => {
         id && setShowCategory(!showCategory)
     };
 
-    const handleFileInputChange = (file) => {
-        setFormData({
-            ...formData,
-            file: file,
+    const publishBook = async (event) => {
+        event.preventDefault();
+
+        if (!formData.genre || !file) {
+            toast.error(!formData.genre ? "Please select a book genre" : "Please upload a file");
+            return;
+        }
+
+        try {
+            const docRef = await addDoc(collection(db, "usersBooks"), {
+                ...formData,
+                fileURL: "", // Placeholder for the file URL, you need to replace this with the actual URL after upload
+            });
+
+            // Upload file to storage
+            const storageRef = ref(storage, `/usersBooks/${docRef.id}`);
+            await uploadBytes(storageRef, file);
+
+          const downloadURL = await getDownloadURL(storageRef);
+
+        // Update the Firestore document with the download URL
+        await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
+            fileURL: downloadURL
         });
+        setFormData({
+            title: "",
+            description: "",
+            genre: "",
+            price: "0",
+            userId: currentUser ? currentUser.uid : "",
+        });
+            toast.success('Uploaded successfully');
+            console.log("Document written with ID: ", docRef.id);
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            toast.error(error.message);
+        }
+        console.log(formData);
+    };
+
+    const close = () => {
+        navigate(-1);
+    };
+
+    const handleShowCategory = () => {
+        setShowCategory(!showCategory);
     };
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const publishBook = async (event) => {
-        toastId.current = toast.loading('Loading...');
-
-        event.preventDefault();
-        toastId.current = toast.loading("Loading...");
-        if (!formData.genre || !formData.file) {
-            if (!formData.genre) {
-                var msg = "Please select a book genre"
-            } else if (!formData.file) {
-                var msg = "Please upload a file"
-            }
-            toast.update(toastId.current, {
-                render: msg,
-                type: "error",
-                isLoading: false,
-                autoClose: 3000, //3 seconds
-                hideProgressBar: false,
-                closeOnClick: true,
-            });
-            return;
-        }
-        try {
-            toast.update(toastId.current, {
-                render: 'Uploaded Successfully',
-                type: 'success',
-                isLoading: false,
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-            });
-            const docRef = await addDoc(collection(db, "books"), {
-                ...formData
-            });
-            
-            console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-            
-            console.error("Error adding document: ", e);
-            const errorMessage = e.message;
-            toast.update(toastId.current, {
-                render: errorMessage,
-                type: 'error',
-                isLoading: false,
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-            });
-        }
-        console.log(formData);
-
+    const handleFileInputChange = (files) => {
+        const selectedFile = files[0];
+        setFile(selectedFile);
+        setFormData({
+            ...formData,
+            file: selectedFile,
+        });
     };
-
-    const close = () => {
-        navigate(-1);
-    };
+    
 
     if (!currentUser) {
         return null;
@@ -266,9 +240,9 @@ const PublishBook = () => {
                 </div>
             </div>
             <div className="publish-preview" {...getRootProps()}>
-                {formData.file ? (
-                    <img src={URL.createObjectURL(formData.file)} alt="" />
-                ) : (
+                 {file ? (
+                    <img src='https://img.freepik.com/premium-vector/pdf-icon-flat-style-document-text-vector-illustration-white-isolated-background-archive-business-concept_157943-463.jpg?size=626&ext=jpg' alt="" />
+                ) : ( 
                     <>
                         <img src={Books} alt="" />
                         <div className="preview-text">

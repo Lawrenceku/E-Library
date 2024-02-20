@@ -2,9 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect, createContext } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged, setPersistence, browserSessionPersistence } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getStorage } from 'firebase/storage'; 
-import 'firebase/firestore';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
@@ -26,7 +25,6 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 // Set session persistence
-setPersistence(auth, browserSessionPersistence);
 
 export const MyContext = createContext(app);
 export const dbContext = createContext(db)

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 import { useEffect, useRef, useState, useContext } from 'react';
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, updateProfile ,GoogleAuthProvider } from "firebase/auth";
-import { MyContext, dbContext } from '../App';
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, updateProfile ,GoogleAuthProvider,setPersistence, browserSessionPersistence, signInWithEmailAndPassword } from "firebase/auth";
+import { MyContext, dbContext, storageContext } from '../App';
 import {ref, set } from "firebase/database";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,8 +24,44 @@ const SignupForm = ({ setProgress }) => {
     const fail = "https://t3.ftcdn.net/jpg/05/38/50/02/360_F_538500243_CgDMCSwiAbFS1agn7yveGBy3qOeEStOT.png";
     const [iconUrl, setIconUrl] = useState('');
     const toastId = useRef(null);
+/*     
+    useEffect(()=>{
+        setPersistence(auth, browserSessionPersistence)
+        .then(() => {
+            // Existing and future Auth states are now persisted in the current
+            // session only. Closing the window would clear any existing state even
+            // if a user forgets to sign out.
+            // ...
+            // New sign-in will be persisted with session persistence.
+            return signInWithEmailAndPassword(auth, email, password);
+          })
+          .catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+          });
     
-
+    },[])
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in.
+                // Set the appropriate state to indicate the user is logged in.
+                setLoggedIn(true);
+                
+                // You can also perform additional actions here if needed,
+                // such as fetching user data or navigating to a specific page.
+            } else {
+                // No user is signed in.
+                // Set the appropriate state to indicate the user is not logged in.
+                setLoggedIn(false);
+            }
+        });
+    
+        // Clean up the subscription when the component unmounts.
+        return unsubscribe;
+    }, []);
+     */
     const googleAuth = async () => {
         try {
             const result = await signInWithPopup(auth, provider);
