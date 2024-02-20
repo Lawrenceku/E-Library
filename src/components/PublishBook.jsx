@@ -11,6 +11,9 @@ import { ref, uploadBytes,getDownloadURL  } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf';
+
+
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -27,6 +30,7 @@ const PublishBook = () => {
     const toastId = useRef(null);
     const [showCategory, setShowCategory] = useState(false);
     const [price, setPrice] = useState()
+    const [thumbnailURL, setThumbnailURL] = useState(null);
     const [showPrice, setShowPrice] = useState(false);
 
   const categoryStyle = {
@@ -90,47 +94,51 @@ const PublishBook = () => {
         id && setShowCategory(!showCategory)
     };
 
+    
+
     const publishBook = async (event) => {
         event.preventDefault();
-
+    
         if (!formData.genre || !file) {
             toast.error(!formData.genre ? "Please select a book genre" : "Please upload a file");
             return;
         }
-
-
+    
         try {
             const docRef = await addDoc(collection(db, "usersBooks"), {
                 ...formData
                 // Placeholder for the file URL, you need to replace this with the actual URL after upload
             });
-
+    
             // Upload file to storage
             const storageRef = ref(storage, `/usersBooks/${docRef.id}`);
             await uploadBytes(storageRef, file);
-
+    
+            // Get download URL after file upload
             const downloadURL = await getDownloadURL(storageRef);
-
-        // Update the Firestore document with the download URL
-        await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
-            fileURL: downloadURL
-        });
-        setFormData({
-            title: "",
-            description: "",
-            genre: "",
-            price: "0",
-            userId: currentUser ? currentUser.uid : "",
-        });
-        setFile(null)
+    
+            // Update the Firestore document with the download URL
+            await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
+                fileURL: downloadURL
+            });
+    
+            setFormData({
+                title: "",
+                description: "",
+                genre: "",
+                price: "0",
+                userId: currentUser ? currentUser.uid : "",
+            });
+            setFile(null);
             toast.success('Uploaded successfully');
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
             console.error("Error adding document: ", error);
             toast.error(error.message);
         }
-        console.log(formData);
     };
+    
+    
 
     const close = () => {
         navigate(-1);
@@ -144,22 +152,48 @@ const PublishBook = () => {
         fileInputRef.current.click();
     };
 
-const handleFileInputChange = (files) => {
-    console.log(files)
-    if (files && files.length > 0) {
-        const selectedFile = files[0];
-        if (selectedFile.type === "application/pdf") {
-            setFile(selectedFile);
+    const handleFileInputChange = async (files) => {
+        if (files && files.length > 0) {
+            const selectedFile = files[0];
+            if (selectedFile.type === "application/pdf") {
+                setFile(selectedFile);
+                
+                // Generate thumbnail
+                const thumbnailURL = await generateThumbnail(selectedFile);
+                setThumbnailURL(thumbnailURL);
+            } else {
+                toast.error("Please upload a PDF file");
+            }
         } else {
-            toast.error("Please upload a PDF file");
+            // Handle case where no files are selected
+            toast.error("Please select a file");
         }
-    } else {
-        // Handle case where no files are selected
-        toast.error("Please select a file");
-    }
+    };  
+    
+    const generateThumbnail = async (pdfFile) => {
+        const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
+        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-};
-    if (!currentUser) {
+        const loadingTask = pdfjs.getDocument(pdfFile);
+        const pdf = await loadingTask.promise;
+
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+        };
+
+        await page.render(renderContext);
+        const thumbnailURL = canvas.toDataURL('image/jpeg');
+        return thumbnailURL;
+    };
+
+      if (!currentUser) {
         return null;
     }
 
