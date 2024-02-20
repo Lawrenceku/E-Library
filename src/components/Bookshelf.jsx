@@ -12,25 +12,6 @@ const Book = ({ genre, title, description }) => {
     const rating = 4;
 
     return (
-/*         <div className="book">
-            <div className="meta">
-                <span className='category'>{genre}</span>
-                <div className="users-rating">
-                    <span className='users'>
-                        <img src={UserIcon} alt="" />
-                        {users}
-                    </span>
-                    <span className="rating">
-                        <img src={StarIcon} alt="" />
-                        {rating}
-                    </span>
-                </div>
-            </div>
-            <p className="title">{title}</p>
-            <p className="description">{description}</p>
-        </div>
-
- */ 
         <div className="book">
         <div className="preview">
             {/* <img src={image} alt="book" /> */}
@@ -80,8 +61,8 @@ const Bookshelf = () => {
         <p className="title">My bookshelf</p>
         <div className="categories">
             <span>History</span>
-            <span>History</span>
-            <span>History</span>
+            <span>Science</span>
+            <span>Philosophy</span>
             <span>+</span>
         </div>
         <div className="book-row">

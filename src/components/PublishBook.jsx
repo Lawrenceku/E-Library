@@ -48,8 +48,8 @@ const PublishBook = () => {
         'Engineering',
         'Tourism',
         'Taxation',
-        'Fiction',
-        'Novel',
+        'Social sciences',
+        'Philosophy',
     ];
 
     const [formData, setFormData] = useState({
