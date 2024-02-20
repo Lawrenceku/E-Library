@@ -1,19 +1,42 @@
-import { useState, useRef, useEffect } from 'react';
+
+import { useState, useEffect, useRef, useContext } from 'react';
+import { dbContext, storageContext, AuthContext} from '../App';
+import { useDropzone } from 'react-dropzone';
+import { collection, addDoc,doc, updateDoc} from "firebase/firestore"; 
 import '../styles/publishbook.css';
 import Close from '../assets/close.svg';
 import Add from '../assets/add.svg';
 import Books from '../assets/books.svg';
+import { ref, uploadBytes,getDownloadURL  } from "firebase/storage";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf';
+
+
+
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const PublishBook = () => {
-    const navigate = useNavigate();
-
+ const navigate = useNavigate();
+    const db = useContext(dbContext);
+    const storage = useContext(storageContext);
     const fileInputRef = useRef(null);
+
+    const [currentUser, setCurrentUser] = useState();
+    const [file, setFile] = useState(null);
     const categories = useRef(null);
     const toastId = useRef(null);
+    const [showCategory, setShowCategory] = useState(false);
+    const [price, setPrice] = useState()
+    const [thumbnailURL, setThumbnailURL] = useState(null);
+    const [showPrice, setShowPrice] = useState(false);
+
+  const categoryStyle = {
+        visibility: showCategory ? 'visible' : 'hidden'
+    };
+
 
     const genres = [
         'Science',
@@ -27,49 +50,43 @@ const PublishBook = () => {
         'Taxation',
         'Fiction',
         'Novel',
-    ]
+    ];
 
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        genre: "",
-        file: null,
-        price: "",
+        genre: '',
+        price: price? price: '0',
+        userId: currentUser ? currentUser.uid : "",
     });
 
-    const [showCategory, setShowCategory] = useState(false);
-
-
-    const handleShowCategory = () => {
-        setShowCategory(!showCategory)
-    };
-
-    if (showCategory) {
-        categories.current.scrollIntoView({ behaviour: 'smooth' })
-    }
-
-    const categoryStyle = {
-        visibility: showCategory ? 'visible' : 'hidden'
-    }
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: (acceptedFiles) => {
+            const selectedFile = acceptedFiles[0];
+            if (selectedFile.type === "application/pdf") {
+                setFile(selectedFile);
+                
+            } else {
+                toast.error("Please upload a PDF file");
+            }
+        },
+        multiple: false,
+        accept: ".pdf" // Restrict to only accept PDF files
+    });
+    
 
     useEffect(() => {
-        function handleClickOutside(event) {
-          if (categories.current && !categories.current.contains(event.target)) {
-            setShowCategory(false);
-          }
-        }
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+        });
     
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const [showPrice, setShowPrice] = useState(false);
+        // Clean up function to unsubscribe when component unmounts
+        return () => unsubscribe();
+    }, [navigate, currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value, id } = event.target;
-        console.log(event.target)
         setFormData({
             ...formData,
             [name ? name : "genre"]: value ? value : id,
@@ -77,51 +94,114 @@ const PublishBook = () => {
         id && setShowCategory(!showCategory)
     };
 
-    const handleFileInputChange = (event) => {
-        const file = event.target.files[0];
-        setFormData({
-            ...formData,
-            file: file,
-        });
+    
+
+    const publishBook = async (event) => {
+        event.preventDefault();
+    
+        if (!formData.genre || !file) {
+            toast.error(!formData.genre ? "Please select a book genre" : "Please upload a file");
+            return;
+        }
+    
+        try {
+            const docRef = await addDoc(collection(db, "usersBooks"), {
+                ...formData
+                // Placeholder for the file URL, you need to replace this with the actual URL after upload
+            });
+    
+            // Upload file to storage
+            const storageRef = ref(storage, `/usersBooks/${docRef.id}`);
+            await uploadBytes(storageRef, file);
+    
+            // Get download URL after file upload
+            const downloadURL = await getDownloadURL(storageRef);
+    
+            // Update the Firestore document with the download URL
+            await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
+                fileURL: downloadURL
+            });
+    
+            setFormData({
+                title: "",
+                description: "",
+                genre: "",
+                price: "0",
+                userId: currentUser ? currentUser.uid : "",
+            });
+            setFile(null);
+            toast.success('Uploaded successfully');
+            console.log("Document written with ID: ", docRef.id);
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            toast.error(error.message);
+        }
+    };
+    
+    
+
+    const close = () => {
+        navigate(-1);
+    };
+
+    const handleShowCategory = () => {
+        setShowCategory(!showCategory);
     };
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const publishBook = async (event) => {
-        event.preventDefault();
-        toastId.current = toast.loading("Loading...");
-        if (!formData.genre || !formData.file) {
-            if (!formData.genre) {
-                var msg = "Please select a book genre"
-            } else if (!formData.file) {
-                var msg = "Please upload a file"
+    const handleFileInputChange = async (files) => {
+        if (files && files.length > 0) {
+            const selectedFile = files[0];
+            if (selectedFile.type === "application/pdf") {
+                setFile(selectedFile);
+                
+                // Generate thumbnail
+                const thumbnailURL = await generateThumbnail(selectedFile);
+                setThumbnailURL(thumbnailURL);
+            } else {
+                toast.error("Please upload a PDF file");
             }
-            toast.update(toastId.current, {
-                render: msg,
-                type: "error",
-                isLoading: false,
-                autoClose: 3000, //3 seconds
-                hideProgressBar: false,
-                closeOnClick: true,
-            });
-            return;
+        } else {
+            // Handle case where no files are selected
+            toast.error("Please select a file");
         }
-        try {
-            // Make a POST request to the server
-        } catch(error) {
-            // Handle error
-        }
-        console.log(formData);
+    };  
+    
+    const generateThumbnail = async (pdfFile) => {
+        const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
+        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+        const loadingTask = pdfjs.getDocument(pdfFile);
+        const pdf = await loadingTask.promise;
+
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+        };
+
+        await page.render(renderContext);
+        const thumbnailURL = canvas.toDataURL('image/jpeg');
+        return thumbnailURL;
+    };
+
+      if (!currentUser) {
+        return null;
     }
 
-    const close = () => {
-        navigate(-1);
-    };
 
     return (
         <div className="publish">
+
+            <div className="toast-container"><ToastContainer ref={toastId} limit={2} /></div>
             <div className="toast-container"><ToastContainer ref={toastId} limit={2}/></div>
             <div className="publish-book">
                 <span className='close' onClick={close}>
@@ -143,6 +223,7 @@ const PublishBook = () => {
                         
                         <label htmlFor="description">Add description*</label>
                         <textarea
+                            style={{resize: 'none'}}
                             placeholder='Book description'
                             rows="5"
                             name="description"
@@ -206,32 +287,23 @@ const PublishBook = () => {
                     </form>
                 </div>
             </div>
-            <div className="publish-preview">
-                { formData.file ? (
-                    <img src={URL.createObjectURL(formData.file)} alt="" />
-                ) : (
+            <div className="publish-preview" {...getRootProps()} onClick={(e)=>e.stopPropagation()}>
+                 {file ? (
+                    <img src='https://img.freepik.com/premium-vector/pdf-icon-flat-style-document-text-vector-illustration-white-isolated-background-archive-business-concept_157943-463.jpg?size=626&ext=jpg' alt="" />
+                ) : ( 
                     <>
                         <img src={Books} alt="" />
                         <div className="preview-text">
                             <p>A preview of your book will show here</p>
                             <p>(It can be a picture or PDF)</p>
                         </div>
-                        <button onClick={handleButtonClick} className="action">Click here to upload</button>
+                        <button onClick={handleButtonClick} className="action">Drop a file here to upload or Click here to browse</button>
                     </>
                 )}
-            </div>
-
-            <div className="bookfile">
-                <input type="file"
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
-                    onChange={handleFileInputChange}
-                    name="file"
-                    required
-                />
+                <input {...getInputProps()} type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={(e) => handleFileInputChange(e.target.files[0])} name="file" required />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PublishBook;
+export default PublishBook

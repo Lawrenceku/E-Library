@@ -13,16 +13,14 @@ const Header = () => {
         const auth = getAuth();
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
-            // Perform navigation when user is null
             if (!user) {
                 navigate('/');
             }
         });
 
-        return () => unsubscribe(); // Cleanup function
+        return () => unsubscribe(); 
     }, [navigate]);
 
-    // Render nothing if user is null and navigation is in progress
     if (!user) {
         return null;
     }
