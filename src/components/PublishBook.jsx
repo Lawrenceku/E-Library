@@ -58,19 +58,32 @@ const PublishBook = () => {
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles) => {
-            setFile(acceptedFiles[0]);
+            const selectedFile = acceptedFiles[0];
+            if (selectedFile.type === "application/pdf") {
+                setFile(selectedFile);
+                setFormData({
+                    ...formData,
+                    file: selectedFile,
+                });
+            } else {
+                toast.error("Please upload a PDF file");
+            }
         },
-        multiple: false
+        multiple: false,
+        accept: ".pdf" // Restrict to only accept PDF files
     });
+    
 
     useEffect(() => {
         const auth = getAuth();
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
-            if (!currentUser) {
-                return null
-            }
         });
+    
+        return unsubscribe;
+    }, []); // Remove dependencies to ensure it runs only once
+    
+    
 
         return () => unsubscribe();
     }, [navigate, currentUser]);
@@ -91,6 +104,7 @@ const PublishBook = () => {
             toast.error(!formData.genre ? "Please select a book genre" : "Please upload a file");
             return;
         }
+
 
         try {
             const docRef = await addDoc(collection(db, "usersBooks"), {
@@ -115,6 +129,7 @@ const PublishBook = () => {
             price: "0",
             userId: currentUser ? currentUser.uid : "",
         });
+        setFile(null)
             toast.success('Uploaded successfully');
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
@@ -137,13 +152,24 @@ const PublishBook = () => {
     };
 
     const handleFileInputChange = (files) => {
-        const selectedFile = files[0];
-        setFile(selectedFile);
-        setFormData({
-            ...formData,
-            file: selectedFile,
-        });
+        if (files && files.length > 0) {
+            const selectedFile = files[0];
+            if (selectedFile.type === "application/pdf") {
+                setFile(selectedFile);
+                setFormData({
+                    ...formData,
+                    file: selectedFile,
+                });
+            } else {
+                toast.error("Please upload a PDF file");
+            }
+        } else {
+            // Handle case where no files are selected
+            toast.error("Please select a file");
+        }
     };
+    
+    
     
 
     if (!currentUser) {
@@ -176,6 +202,7 @@ const PublishBook = () => {
                         
                         <label htmlFor="description">Add description*</label>
                         <textarea
+                            style={{resize: 'none'}}
                             placeholder='Book description'
                             rows="5"
                             name="description"
@@ -239,7 +266,7 @@ const PublishBook = () => {
                     </form>
                 </div>
             </div>
-            <div className="publish-preview" {...getRootProps()}>
+            <div className="publish-preview" {...getRootProps()} onClick={(e)=>e.stopPropagation()}>
                  {file ? (
                     <img src='https://img.freepik.com/premium-vector/pdf-icon-flat-style-document-text-vector-illustration-white-isolated-background-archive-business-concept_157943-463.jpg?size=626&ext=jpg' alt="" />
                 ) : ( 
