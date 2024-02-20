@@ -1,6 +1,6 @@
+import Hero from './Hero';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import Hero from './Hero';
 import Bookshelf from './Bookshelf';
 import TopRead from './TopRead';
 import Recommended from './Recommended';

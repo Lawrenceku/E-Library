@@ -1,0 +1,78 @@
+.community {
+    padding: 20px;
+}
+.info-container {
+    display: flex;
+}
+.header-img-container {
+    width: 100%;
+    padding-bottom: 15%;
+    background: #000;
+    border-radius: 12px;
+}
+.community-image-container {
+    position: relative;
+    width: 200px;
+    padding: 0 20px;
+}
+.community-image {
+    position: absolute;
+    background: #645E5E;
+    border-radius: 100%;
+    width: 120px;
+    height: 120px;
+    top: -60px;
+    font-size: 60px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+}
+.community-image span {
+    padding-top: 15px;
+}
+.community .info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0px 10px 0px;
+    justify-content: space-between;
+}
+.community .name {
+    font-size: 1.6em;
+    font-weight: 500;
+    margin: 0;
+}
+.community .join {
+    background: #7140C1;
+    padding: 13px 30px;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+.community .joined {
+    background: #fff;
+    padding: 13px 30px;
+    color: #7140C1;
+    border: none;
+    outline: 1px solid #7140C1;
+    border-radius: 50px;
+    cursor: pointer;
+}
+.community .members {
+    font-size: 14px;
+    color: #666666;
+}
+.community .header-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 30px 0px;
+}
+.community .book-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.community .book {
+    flex: 1;
+}

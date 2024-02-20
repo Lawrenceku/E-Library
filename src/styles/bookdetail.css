@@ -1,0 +1,37 @@
+.book-detail {
+    padding: 20px;
+}
+.book-detail .back {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    color: #000;
+    border: none;
+}
+.book-detail .title {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 15px 0px 5px;
+}
+.author-date-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.book-detail .author, .book-detail .date {
+    margin: 0;
+    margin-bottom: 20px;
+    color: #747479;
+}
+.book-detail .book-thumbnail {
+    width: 100%;
+    padding-bottom: 40%;
+    background: #747479;
+}
+.book-detail .header-title {
+    font-weight: 700;
+    margin: 30px 0 0px;
+}
+.book-detail .content {
+    color: #747479;
+}
