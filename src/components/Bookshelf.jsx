@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import UserIcon from '../assets/users.svg';
 import StarIcon from '../assets/star.svg';
 import '../styles/bookshelf.css';
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 const Book = ({ genre, title, description }) => {
