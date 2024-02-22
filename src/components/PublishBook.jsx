@@ -11,7 +11,7 @@ import { ref, uploadBytes,getDownloadURL  } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { getDocument } from 'pdfjs-dist/legacy/build/pdf';
+// import { getDocument } from 'pdfjs-dist/legacy/build/pdf';
 
 
 
@@ -168,28 +168,28 @@ const PublishBook = () => {
         }
     };  
     
-/*     const generateThumbnail = async (pdfFile) => {
-        //const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
-       // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+    const generateThumbnail = async (pdfFile) => {
+        // const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
+        // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-        const loadingTask = pdfjs.getDocument(pdfFile);
-        const pdf = await loadingTask.promise;
+        // const loadingTask = pdfjs.getDocument(pdfFile);
+        // const pdf = await loadingTask.promise;
 
-        const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 1 });
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
+        // const page = await pdf.getPage(1);
+        // const viewport = page.getViewport({ scale: 1 });
+        // const canvas = document.createElement('canvas');
+        // const context = canvas.getContext('2d');
+        // canvas.height = viewport.height;
+        // canvas.width = viewport.width;
+        // const renderContext = {
+        //     canvasContext: context,
+        //     viewport: viewport
+        // };
 
-        await page.render(renderContext);
-        const thumbnailURL = canvas.toDataURL('image/jpeg');
-        return thumbnailURL;
-    }; */
+        // await page.render(renderContext);
+        // const thumbnailURL = canvas.toDataURL('image/jpeg');
+        // return thumbnailURL;
+    };
 
       if (!currentUser) {
         return null;

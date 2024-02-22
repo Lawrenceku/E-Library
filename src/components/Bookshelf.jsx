@@ -41,8 +41,6 @@ const Bookshelf = () => {
         display: "block",
         margin: "0 auto",
         borderColor: "180E29",
-        width:'80px',
-        height:'80px'
       };
     const [loading, setLoading] = useState(true);
     const [color, setColor] = useState("#180E29");
@@ -79,7 +77,7 @@ const Bookshelf = () => {
             color={color}
             loading={loading}
             cssOverride={override}
-            size={150}
+            size={100}
             aria-label="Loading Spinner"
             data-testid="loader"
         />
