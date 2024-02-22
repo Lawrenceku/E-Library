@@ -26,6 +26,7 @@
     flex: 0 1 40%;
 }
 .splash .image-container img {
+    padding-top: 70px;
     width: 300px;
 }
 .signup-container, .interests, .signup .role {

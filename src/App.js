@@ -10,7 +10,6 @@ import Dashboard from './components/Dashboard';
 import PublishBook from './components/PublishBook';
 import Community from './components/Community';
 import BookDetail from './components/BookDetail';
-import { initializeApp } from 'firebase/app';
 import { getDatabase } from "firebase/database";
 //import { getFirestore } from "firebase/firestore";
 

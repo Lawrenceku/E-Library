@@ -15,7 +15,6 @@
     text-align: left;
     max-height: 400px;
     width: 100%;
-    max-width: 500px;
     overflow-y: scroll;
     box-sizing: border-box;
   }
@@ -31,6 +30,16 @@
   .categories::-webkit-scrollbar-thumb {
     background-color: #636262;
     border-radius: 100px;
+  }
+  .selected-interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .selected-interests span {
+    padding: 5px 7px;
+    background: #ccc;
+    border-radius: 5px;
   }
   .interests .interest {
     position: relative;

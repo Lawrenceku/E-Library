@@ -87,7 +87,14 @@ const Interests = ({ setProgress }) => {
                 </div>
                 <div className='select-category' tabIndex="1" onClick={handleShowInterests}>
                     <div className='selected'>
-                        <span>{selected.length >= 1 ? selected.length : "Choose interests"}</span>
+                        <div className="selected-interests">
+                            {
+                                selected.map(interest => (
+                                    <span>{interest}</span>
+                                ))
+                            }
+                            
+                        </div>
                         <svg height="20" viewBox="0 0 1792 1792" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M1395 736q0 13-10 23l-466 466q-10 10-23 10t-23-10l-466-466q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l393 393 393-393q10-10 23-10t23 10l50 50q10 10 10 23z"/></svg>
                     </div>
                 </div>
