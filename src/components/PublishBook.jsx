@@ -37,7 +37,6 @@ const PublishBook = () => {
         visibility: showCategory ? 'visible' : 'hidden'
     };
 
-
     const genres = [
         'Science',
         'Mathematics',
@@ -71,7 +70,7 @@ const PublishBook = () => {
             }
         },
         multiple: false,
-        accept: ".pdf" // Restrict to only accept PDF files
+        accept: ".pdf"
     });
     
 
@@ -98,7 +97,7 @@ const PublishBook = () => {
 
     const publishBook = async (event) => {
         event.preventDefault();
-    
+        toastId.current = toast.loading("Loading...");
         if (!formData.genre || !file) {
             toast.error(!formData.genre ? "Please select a book genre" : "Please upload a file");
             return;
@@ -107,7 +106,6 @@ const PublishBook = () => {
         try {
             const docRef = await addDoc(collection(db, "usersBooks"), {
                 ...formData
-                // Placeholder for the file URL, you need to replace this with the actual URL after upload
             });
     
             // Upload file to storage
@@ -159,9 +157,9 @@ const PublishBook = () => {
                 setFile(selectedFile);
                 
                 // Generate thumbnail
-                const thumbnailURL = await generateThumbnail(selectedFile);
+/*                 const thumbnailURL = await generateThumbnail(selectedFile);
                 setThumbnailURL(thumbnailURL);
-            } else {
+ */            } else {
                 toast.error("Please upload a PDF file");
             }
         } else {
@@ -170,9 +168,9 @@ const PublishBook = () => {
         }
     };  
     
-    const generateThumbnail = async (pdfFile) => {
-        const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
-        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+/*     const generateThumbnail = async (pdfFile) => {
+        //const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
+       // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
         const loadingTask = pdfjs.getDocument(pdfFile);
         const pdf = await loadingTask.promise;
@@ -191,16 +189,15 @@ const PublishBook = () => {
         await page.render(renderContext);
         const thumbnailURL = canvas.toDataURL('image/jpeg');
         return thumbnailURL;
-    };
+    }; */
 
       if (!currentUser) {
         return null;
     }
-
+    
 
     return (
         <div className="publish">
-
             <div className="toast-container"><ToastContainer ref={toastId} limit={2} /></div>
             <div className="toast-container"><ToastContainer ref={toastId} limit={2}/></div>
             <div className="publish-book">

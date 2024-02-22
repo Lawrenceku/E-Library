@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
-import { dbContext } from '../App'; // Assuming you have defined dbContext in your app
+import { useState, useEffect, useContext,CSSProperties  } from 'react';
+import { dbContext } from '../App';
 import { collection, getDocs } from "firebase/firestore"; 
 import UserIcon from '../assets/users.svg';
 import StarIcon from '../assets/star.svg';
@@ -8,10 +8,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 
 const Book = ({ genre, title, description }) => {
-    // Hardcoded values for users and rating
     const users = '99+';
     const rating = 4;
-
     return (
         <div className="book">
         <div className="preview">
@@ -39,16 +37,27 @@ const Book = ({ genre, title, description }) => {
 const Bookshelf = () => {
     const db = useContext(dbContext);
     const [books, setBooks] = useState([]);
+    const override: CSSProperties = {
+        display: "block",
+        margin: "0 auto",
+        borderColor: "180E29",
+        width:'80px',
+        height:'80px'
+      };
+    const [loading, setLoading] = useState(true);
+    const [color, setColor] = useState("#180E29");
 
     useEffect(() => {
+        setLoading(true)
         const fetchBooks = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, 'usersBooks')); // Assuming your collection name is 'books'
+                const querySnapshot = await getDocs(collection(db, 'toshokanBooks'));
                 const fetchedBooks = [];
                 querySnapshot.forEach((doc) => {
                     fetchedBooks.push({ id: doc.id, ...doc.data() });
                 });
-                setBooks(fetchedBooks);
+                 setLoading(false)
+                await setBooks(fetchedBooks);
             } catch (error) {
                 console.error('Error fetching books: ', error);
             }
@@ -66,11 +75,19 @@ const Bookshelf = () => {
             <span>Philosophy</span>
             <span>+</span>
         </div>
+        <ClipLoader
+            color={color}
+            loading={loading}
+            cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+        />
         <div className="book-row">
             {books.map((book) => (
                 <Book
                   key={book.id}
-                  genre={book.genre} // Using 'genre' instead of 'category'
+                  genre={book.genre}
                   title={book.title}
                   description={book.description}
 
