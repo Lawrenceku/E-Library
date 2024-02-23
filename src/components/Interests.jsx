@@ -89,9 +89,12 @@ const Interests = ({ setProgress }) => {
                     <div className='selected'>
                         <div className="selected-interests">
                             {
+                                selected.length !== 0 ?
                                 selected.map(interest => (
                                     <span>{interest}</span>
-                                ))
+                                )) : (
+                                    "Click to choose"
+                                )
                             }
                             
                         </div>
