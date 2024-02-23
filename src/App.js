@@ -10,6 +10,7 @@ import Dashboard from './components/Dashboard';
 import PublishBook from './components/PublishBook';
 import Community from './components/Community';
 import BookDetail from './components/BookDetail';
+import Explore from './components/Explore';
 import { getDatabase } from "firebase/database";
 //import { getFirestore } from "firebase/firestore";
 
@@ -60,6 +61,7 @@ function App() {
           <Route path="/publish" element={<PublishBook />} />
           <Route path="/community" element={<Community />} />
           <Route path="/book" element={<BookDetail />} />
+          <Route path="/explore" element={<Explore />} />
         </Routes>
         </AuthContext.Provider>
         </storageContext.Provider>

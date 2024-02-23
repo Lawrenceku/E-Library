@@ -5,7 +5,7 @@ import NotificationIcon from '../assets/notification.svg';
 import SearchIcon from '../assets/search-normal.svg';
 import '../styles/header.css';
 
-const Header = () => {
+const Header = ({ title }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
@@ -38,8 +38,8 @@ const Header = () => {
     return (
         <header>
             <div className="hello">
-                <p className='title'>Hello, {firstName && capitalizeFirstLetter(firstName)}</p>
-                <p className='sub-title'>What book are you reading today.</p>
+                <p className='title'>{title ? title : `Hello, ${firstName && capitalizeFirstLetter(firstName)}`}</p>
+                <p className='sub-title'>What book are you reading today?</p>
             </div>
 
             <div className="actions">

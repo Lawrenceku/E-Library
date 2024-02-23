@@ -5,6 +5,8 @@
     padding: 20px;
     width: 350px;
     border-right: 1.2px solid #EDEDED;
+    background: #fff;
+    z-index: 1;
 }
 .sidebar p.sub-header {
     font-size: 14px;

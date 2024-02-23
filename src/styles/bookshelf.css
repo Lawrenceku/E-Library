@@ -28,7 +28,7 @@
     margin-top: 30px;
 }
 .book {
-    flex: 1 0 250px;
+    flex: 0 1 300px;
 }
 .book .preview {
     position: relative;

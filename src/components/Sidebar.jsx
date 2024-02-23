@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Toshokan from '../assets/Toshokan.svg';
 import ArrowDownIcon from '../assets/arrow-right.svg';
 import HomeIcon from '../assets/home-2.svg';
-import CollectionIcon from '../assets/Frame.svg';
+import SearchIcon from '../assets/search-normal.svg';
 import PublishIcon from '../assets/Book.svg';
 import ClockIcon from '../assets/clock.svg';
 import SettingsIcon from '../assets/setting-2.svg';
@@ -24,11 +24,11 @@ const Sidebar = () => {
             <ul className="links">
                 <li className='active'>
                     <img src={HomeIcon} alt="" />
-                    <Link to="/">Home</Link>
+                    <Link to="/dashboard">Home</Link>
                 </li>
                 <li>
-                    <img src={CollectionIcon} alt="" />
-                    <Link to="/">Collection</Link>
+                    <img src={SearchIcon} alt="" />
+                    <Link to="/explore">Explore</Link>
                 </li>
                 <li>
                     <img src={PublishIcon} alt="" />
