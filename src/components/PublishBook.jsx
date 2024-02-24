@@ -99,24 +99,31 @@ const PublishBook = () => {
         event.preventDefault();
         toastId.current = toast.loading("Loading...");
         if (!formData.genre || !file) {
-            toast.error(!formData.genre ? "Please select a book genre" : "Please upload a file");
+            toast.update(toastId.current, {
+                render:!formData.genre ? "Please select a book genre" : "Please upload a file",
+                type: "warning",
+                isLoading: false,
+                autoClose: 3000, //3 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+            });
             return;
         }
     
         try {
-            const docRef = await addDoc(collection(db, "toshokanBooks"), {
+            const docRef = await addDoc(collection(db, "usersBooks"), {
                 ...formData
             });
     
             // Upload file to storage
-            const storageRef = ref(storage, `/toshokanBooks/${docRef.id}`);
+            const storageRef = ref(storage, `/usersBooks/${docRef.id}`);
             await uploadBytes(storageRef, file);
     
             // Get download URL after file upload
             const downloadURL = await getDownloadURL(storageRef);
     
             // Update the Firestore document with the download URL
-            await updateDoc(doc(collection(db, "toshokanBooks"), docRef.id), {
+            await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
                 fileURL: downloadURL
             });
     
@@ -128,11 +135,25 @@ const PublishBook = () => {
                 userId: currentUser ? currentUser.uid : "",
             });
             setFile(null);
-            toast.success('Uploaded successfully');
+            toast.update(toastId.current, {
+                render: "Successfully Uploaded",
+                type: "success",
+                isLoading: false,
+                autoClose: 3000, //3 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+            });
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
-            console.error("Error adding document: ", error);
-            toast.error(error.message);
+            toast.update(toastId.current, {
+                render: error.message,
+                type: "error",
+                isLoading: false,
+                autoClose: 3000, //3 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+            });
+
         }
     };
     
@@ -199,7 +220,6 @@ const PublishBook = () => {
     return (
         <div className="publish">
             <div className="toast-container"><ToastContainer ref={toastId} limit={2} /></div>
-            <div className="toast-container"><ToastContainer ref={toastId} limit={2}/></div>
             <div className="publish-book">
                 <span className='close' onClick={close}>
                     <img src={Close} alt="close" />
@@ -216,7 +236,7 @@ const PublishBook = () => {
                             value={formData.title}
                             onChange={handleInputChange}
                             required
-                            maxlength="40"
+                            maxlength="60"
                         />
                         
                         <label htmlFor="description">Add description*</label>

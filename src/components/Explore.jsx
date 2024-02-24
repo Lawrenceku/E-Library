@@ -182,6 +182,14 @@ const Explore = () => {
                                 <span>+</span>
                             </div>
                             <div className="books">
+                            <ClipLoader
+                                color={color}
+                                loading={loading}
+                                cssOverride={override}
+                                size={70}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                            />
                                 {books.map((book, idx) => (
                                 <Book
                                 key={book.id}
