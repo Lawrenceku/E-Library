@@ -1,9 +1,15 @@
 import Sidebar from './Sidebar';
 import Header from './Header';
-import Book from './Book';
 import '../styles/dashboard.css';
 import '../styles/explore.css';
+import { useState, useEffect, useContext,CSSProperties  } from 'react';
+import { dbContext } from '../App';
+import { collection, getDocs } from "firebase/firestore"; 
+import UserIcon from '../assets/users.svg';
+import StarIcon from '../assets/star.svg';
 import { Link } from 'react-router-dom';
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 const storiesList = [
     {
@@ -32,117 +38,121 @@ const storiesList = [
     }
 ]
 
-const Books = [
-    {
-        "image": "",
-        "category": "Science",
-        "users": "99+",
-        "rating": 4,
-        "title": "Engineering Mathematics",
-        "description": "Lorem ipsum dolor"
-    },
-    {
-        "image": "",
-        "category": "Science",
-        "users": "99+",
-        "rating": 4,
-        "title": "Engineering Mathematics 2",
-        "description": "Lorem ipsum dolor"
-    },
-    {
-        "image": "",
-        "category": "Science",
-        "users": "99+",
-        "rating": 4,
-        "title": "Engineering Mathematics 2",
-        "description": "Lorem ipsum dolor"
-    },
-    {
-        "image": "",
-        "category": "Science",
-        "users": "99+",
-        "rating": 4,
-        "title": "Engineering Mathematics 2",
-        "description": "Lorem ipsum dolor"
-    },
-    {
-        "image": "",
-        "category": "Science",
-        "users": "99+",
-        "rating": 4,
-        "title": "Engineering Mathematics 2",
-        "description": "Lorem ipsum dolor"
-    },
-    {
-        "image": "",
-        "category": "Science",
-        "users": "99+",
-        "rating": 4,
-        "title": "Engineering Mathematics 2",
-        "description": "Lorem ipsum dolor"
-    },
-    
-]
+const Book = ({ genre, title, description }) => {
+    const users = '99+';
+    const rating = 4;
+    return (
+        <div className="book">
+        <div className="preview">
+            {/* <img src={image} alt="book" /> */}
+        </div>
+        <div className="meta">
+            <span className='category'>{genre}</span>
+            <div className="users-rating">
+                <span className='users'>
+                    <img src={UserIcon} alt="" />
+                    {users}
+                </span>
+                <span className="rating">
+                    <img src={StarIcon} alt="" />
+                    {rating}
+                </span>
+            </div>
+        </div>
+        <p className="title">{title}</p>
+        <p className="description">{description}</p>
+    </div>
+   );
+};
 
 const communitiesList = [
     {
         "id": "",
         "name": "The Science Hub",
-        "members": "212K"
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "The Philosophers",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Mathematics Geek",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Business Book Bunch",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Electrical Engineering Enclave",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Calculus Collective",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Physics Pharaohs",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "The Accountants",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Social Science Society",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Computer Engineers",
+        "members": "0"
     },
     {
         "id": "",
-        "name": "The Science Hub",
-        "members": "212K"
+        "name": "Business Enthusiasts",
+        "members": "0"
     },
 ]
 
 const Explore = () => {
+    const db = useContext(dbContext);
+    const [books, setBooks] = useState([]);
+    const override: CSSProperties = {
+        display: "block",
+        margin: "0 auto",
+        borderColor: "180E29",
+      };
+    const [loading, setLoading] = useState(true);
+    const [color, setColor] = useState("#180E29");
+
+    useEffect(() => {
+        setLoading(true)
+        const fetchBooks = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'usersBooks'));
+                const fetchedBooks = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedBooks.push({ id: doc.id, ...doc.data() });
+                });
+                 setLoading(false)
+                await setBooks(fetchedBooks);
+            } catch (error) {
+                console.error('Error fetching books: ', error);
+            }
+        };
+
+        fetchBooks();
+    }, [db]);
+
     return (
         <div className="dashboard">
             <Sidebar />
@@ -172,16 +182,14 @@ const Explore = () => {
                                 <span>+</span>
                             </div>
                             <div className="books">
-                                {Books.map((book, idx) => (
-                                    <Book
-                                        key={idx}
-                                        image={book.image}
-                                        category={book.category}
-                                        users={book.users}
-                                        rating={book.rating}
-                                        title={book.title}
-                                        description={book.description}
-                                    />
+                                {books.map((book, idx) => (
+                                <Book
+                                key={book.id}
+                                genre={book.genre}
+                                title={book.title}
+                                description={book.description}
+
+                                />
                                 ))}
                             </div>
                         </div>

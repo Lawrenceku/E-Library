@@ -49,7 +49,7 @@ const Bookshelf = () => {
         setLoading(true)
         const fetchBooks = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, 'toshokanBooks'));
+                const querySnapshot = await getDocs(collection(db, 'usersBooks'));
                 const fetchedBooks = [];
                 querySnapshot.forEach((doc) => {
                     fetchedBooks.push({ id: doc.id, ...doc.data() });
@@ -68,16 +68,16 @@ const Bookshelf = () => {
        <div className="bookshelf">
         <p className="title">My bookshelf</p>
         <div className="categories">
-            <span>History</span>
+            <span>All</span>
             <span>Science</span>
-            <span>Philosophy</span>
+            <span>Engineering</span>
             <span>+</span>
         </div>
         <ClipLoader
             color={color}
             loading={loading}
             cssOverride={override}
-            size={100}
+            size={70}
             aria-label="Loading Spinner"
             data-testid="loader"
         />

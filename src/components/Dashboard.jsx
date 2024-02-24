@@ -13,9 +13,9 @@ const Dashboard = () => {
             <div className="dashboard-main">
                 <Header />
                 <Hero />
-                <Bookshelf />
-                <TopRead />
                 <Recommended />
+                <TopRead />
+                <Bookshelf />
             </div>
         </div>
     )

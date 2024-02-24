@@ -188,15 +188,15 @@ const SignupForm = ({ setProgress }) => {
                 <input required onChange={(event) => setLastName(event.target.value)} placeholder='Last name' type="text" />
                 <input required onChange={(event) => setEmail(event.target.value)} placeholder='Email address' type="email" />
                 <div className='password-container'>
-                    <input required onChange={(event) => isStrongPassword(event.target.value)} placeholder='Password' type={passwordVisible ? 'text' : 'password'} name="" id="" />
-                    <img onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={show} alt="" />
+                    <input required onChange={(event) => isStrongPassword(event.target.value)} placeholder='Password' type={passwordVisible ? 'text' : 'password'} name=""  id="pwd1" />
+                    <img className='password-icon' onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={show} alt="" />
                 </div>
                 <div id='password-requirements'>
                 <span >{/*Your password must be at least 8 characters long  and contain at least one lowercase letter, one uppercase letter, one digit. */}</span>
                 </div>
                 <div className='password-container'>
                     <input required onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type={confirmPasswordVisible ? 'text' : 'password'} name="" id="pwd2" />
-                    <img onClick={toggleConfirmPasswordVisibility} style={{cursor: 'pointer'}} src={show} alt="" />
+                    <img className='password-icon' onClick={toggleConfirmPasswordVisibility} style={{cursor: 'pointer'}} src={show} alt="" />
                 </div>
                 
                 <input type="submit" value="Continue" />

@@ -104,19 +104,19 @@ const PublishBook = () => {
         }
     
         try {
-            const docRef = await addDoc(collection(db, "usersBooks"), {
+            const docRef = await addDoc(collection(db, "toshokanBooks"), {
                 ...formData
             });
     
             // Upload file to storage
-            const storageRef = ref(storage, `/usersBooks/${docRef.id}`);
+            const storageRef = ref(storage, `/toshokanBooks/${docRef.id}`);
             await uploadBytes(storageRef, file);
     
             // Get download URL after file upload
             const downloadURL = await getDownloadURL(storageRef);
     
             // Update the Firestore document with the download URL
-            await updateDoc(doc(collection(db, "usersBooks"), docRef.id), {
+            await updateDoc(doc(collection(db, "toshokanBooks"), docRef.id), {
                 fileURL: downloadURL
             });
     
@@ -216,6 +216,7 @@ const PublishBook = () => {
                             value={formData.title}
                             onChange={handleInputChange}
                             required
+                            maxlength="40"
                         />
                         
                         <label htmlFor="description">Add description*</label>
