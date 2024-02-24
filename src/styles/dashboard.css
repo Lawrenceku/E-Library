@@ -2,6 +2,7 @@
     display: flex;
 }
 .dashboard-main {
+    position: relative;
     margin-left: 350px;
-    width: 100%;
+    width: calc(100% - 350px);
 }
