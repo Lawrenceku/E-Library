@@ -8,17 +8,16 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { pdfjs } from 'react-pdf';
 import { Document, Page } from 'react-pdf';
 
-const Book = ({ genre, title, description }) => {
+const Book = ({ genre, title, description, fileURL }) => {
     const [pagesNumber, setPagesNumber] = useState(null);
     const [firstPage, setFirstPage] = useState(1);
-    const [file, setFile] = useState(null)
     const users = '99+';
     const rating = 4;
-
+    console.log(fileURL)
     return (
         <div className="book">
         <div className="preview">
-            <Document file={file} onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
+            <Document  file={`https://firebasestorage.googleapis.com/v0/b/toshokan-6efd1.appspot.com/o/toshokanBooks%2FHO3tDoOtD8g9Md732ayF?alt=media&token=d62c6a18-0151-4c56-b2bc-3d66bb3640a0`} onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
                 <Page pageNumber={firstPage} /> 
             </Document>
         </div>
@@ -59,25 +58,26 @@ const Bookshelf = () => {
         import.meta.url,
         ).toString();
     
-    useEffect(() => {
-        setLoading(true)
-        const fetchBooks = async () => {
-            try {
-                const querySnapshot = await getDocs(collection(db, 'usersBooks'));
-                const fetchedBooks = [];
-                querySnapshot.forEach((doc) => {
-                    fetchedBooks.push({ id: doc.id, ...doc.data() });
-                    fetchedBooks.map(book=>setFile(book))
-                });
-                 setLoading(false)
-                await setBooks(fetchedBooks);
-            } catch (error) {
-                console.error('Error fetching books: ', error);
-            }
-        };
+        useEffect(() => {
+            setLoading(true);
+            const fetchBooks = async () => {
+                try {
+                    const querySnapshot = await getDocs(collection(db, 'usersBooks'));
+                    const fetchedBooks = querySnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data(),
+                    }));
+                    setBooks(fetchedBooks);
+                    setLoading(false);
+                } catch (error) {
+                    console.error('Error fetching books: ', error);
+                }
+            };
+        
+            fetchBooks();
+        }, [db]);
 
-        fetchBooks();
-    }, [db]);
+        
 
     return (
        <div className="bookshelf">
@@ -102,6 +102,7 @@ const Bookshelf = () => {
                   key={book.id}
                   genre={book.genre}
                   title={book.title}
+                  fileURL = {book.fileURL}
                   description={book.description}
 
                 />
