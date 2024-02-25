@@ -53,11 +53,11 @@ ul.links li a, ul.quick-action li a {
 }
 ul.links li:hover, ul.links li.active,
 ul.quick-action li:hover {
-    color: #7140C1;
+    color: rgba(113, 64, 193, 0.20);
     background: rgba(113, 64, 193, 0.15);
 }
 ul li.active a, ul li a:hover {
-    color: #7140C1;
+    color: #747479;
 }
 .ai {
     padding: 30px 18px;
