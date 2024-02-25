@@ -7,13 +7,13 @@ import '../styles/bookshelf.css';
 import ClipLoader from "react-spinners/ClipLoader";
 
 
-const Book = ({ genre, title, description }) => {
+const Book = ({ genre, title, description, imageURL }) => {
     const users = '99+';
     const rating = 4;
     return (
         <div className="book">
         <div className="preview">
-            {/* <img src={image} alt="book" /> */}
+        <img src={imageURL} alt="" />
         </div>
         <div className="meta">
             <span className='category'>{genre}</span>
@@ -87,6 +87,7 @@ const Recommended = () => {
                   key={book.id}
                   genre={book.genre}
                   title={book.title}
+                  imageURL={book.imageURL}
                   description={book.description}
 
                 />

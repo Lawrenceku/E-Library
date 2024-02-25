@@ -8,7 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { pdfjs } from 'react-pdf';
 import { Document, Page } from 'react-pdf';
 
-const Book = ({ genre, title, description, fileURL }) => {
+const Book = ({ genre, title, description, fileURL, imageURL }) => {
     const [pagesNumber, setPagesNumber] = useState(null);
     const [firstPage, setFirstPage] = useState(1);
     const users = '99+';
@@ -17,10 +17,11 @@ const Book = ({ genre, title, description, fileURL }) => {
     return (
         <div className="book">
         <div className="preview">
-            <Document  file={`https://firebasestorage.googleapis.com/v0/b/toshokan-6efd1.appspot.com/o/toshokanBooks%2FHO3tDoOtD8g9Md732ayF?alt=media&token=d62c6a18-0151-4c56-b2bc-3d66bb3640a0`} onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
+            <img src={imageURL} alt="" />
+{/*             <Document  file={{url : 'https://firebasestorage.googleapis.com/v0/b/toshokan-6efd1.appspot.com/o/toshokanBooks%2FHO3tDoOtD8g9Md732ayF?alt=media&token=d62c6a18-0151-4c56-b2bc-3d66bb3640a0',}}  onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
                 <Page pageNumber={firstPage} /> 
             </Document>
-        </div>
+ */}        </div>
         <div className="meta">
             <span className='category'>{genre}</span>
             <div className="users-rating">
@@ -103,6 +104,7 @@ const Bookshelf = () => {
                   genre={book.genre}
                   title={book.title}
                   fileURL = {book.fileURL}
+                  imageURL={book.imageURL}
                   description={book.description}
 
                 />
