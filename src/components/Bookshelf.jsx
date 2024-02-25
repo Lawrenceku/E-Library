@@ -5,15 +5,22 @@ import UserIcon from '../assets/users.svg';
 import StarIcon from '../assets/star.svg';
 import '../styles/bookshelf.css';
 import ClipLoader from "react-spinners/ClipLoader";
-
+import { pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 
 const Book = ({ genre, title, description }) => {
+    const [pagesNumber, setPagesNumber] = useState(null);
+    const [firstPage, setFirstPage] = useState(1);
+    const [file, setFile] = useState(null)
     const users = '99+';
     const rating = 4;
+
     return (
         <div className="book">
         <div className="preview">
-            {/* <img src={image} alt="book" /> */}
+            <Document file={file} onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
+                <Page pageNumber={firstPage} /> 
+            </Document>
         </div>
         <div className="meta">
             <span className='category'>{genre}</span>
@@ -37,6 +44,8 @@ const Book = ({ genre, title, description }) => {
 const Bookshelf = () => {
     const db = useContext(dbContext);
     const [books, setBooks] = useState([]);
+    const [firstPage, setFirstPage] = useState(1);
+    const [file, setFile] = useState(null)
     const override: CSSProperties = {
         display: "block",
         margin: "0 auto",
@@ -44,7 +53,12 @@ const Bookshelf = () => {
       };
     const [loading, setLoading] = useState(true);
     const [color, setColor] = useState("#180E29");
-
+    
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/build/pdf.worker.min.js',
+        import.meta.url,
+        ).toString();
+    
     useEffect(() => {
         setLoading(true)
         const fetchBooks = async () => {
@@ -53,6 +67,7 @@ const Bookshelf = () => {
                 const fetchedBooks = [];
                 querySnapshot.forEach((doc) => {
                     fetchedBooks.push({ id: doc.id, ...doc.data() });
+                    fetchedBooks.map(book=>setFile(book))
                 });
                  setLoading(false)
                 await setBooks(fetchedBooks);

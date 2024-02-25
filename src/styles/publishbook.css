@@ -156,6 +156,11 @@
     flex: 1;
     padding: 50px;
 }
+.thumbnail{
+    height:100vh;
+    overflow-y: hidden;
+    width: 100%;
+}
 .publish-preview .action {
     margin-top: 20px;
 }

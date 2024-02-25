@@ -11,19 +11,16 @@ import { ref, uploadBytes,getDownloadURL  } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-// import { getDocument } from 'pdfjs-dist/legacy/build/pdf';
-
-
-
+import { pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const PublishBook = () => {
- const navigate = useNavigate();
+    const navigate = useNavigate();
     const db = useContext(dbContext);
     const storage = useContext(storageContext);
     const fileInputRef = useRef(null);
-
     const [currentUser, setCurrentUser] = useState();
     const [file, setFile] = useState(null);
     const categories = useRef(null);
@@ -32,6 +29,14 @@ const PublishBook = () => {
     const [price, setPrice] = useState()
     const [thumbnailURL, setThumbnailURL] = useState(null);
     const [showPrice, setShowPrice] = useState(false);
+    const [pagesNumber, setPagesNumber] = useState(null);
+    const [firstPage, setFirstPage] = useState(1);
+
+
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/build/pdf.worker.min.js',
+        import.meta.url,
+      ).toString();
 
   const categoryStyle = {
         visibility: showCategory ? 'visible' : 'hidden'
@@ -189,28 +194,9 @@ const PublishBook = () => {
         }
     };  
     
-    const generateThumbnail = async (pdfFile) => {
-        // const pdfjs = await import('pdfjs-dist/es5/build/pdf.js');
-        // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-        // const loadingTask = pdfjs.getDocument(pdfFile);
-        // const pdf = await loadingTask.promise;
-
-        // const page = await pdf.getPage(1);
-        // const viewport = page.getViewport({ scale: 1 });
-        // const canvas = document.createElement('canvas');
-        // const context = canvas.getContext('2d');
-        // canvas.height = viewport.height;
-        // canvas.width = viewport.width;
-        // const renderContext = {
-        //     canvasContext: context,
-        //     viewport: viewport
-        // };
-
-        // await page.render(renderContext);
-        // const thumbnailURL = canvas.toDataURL('image/jpeg');
-        // return thumbnailURL;
-    };
+/*     const onDocumentLoadSuccess = ()=>{
+        return null
+    } */
 
       if (!currentUser) {
         return null;
@@ -307,8 +293,15 @@ const PublishBook = () => {
             </div>
             <div className="publish-preview" {...getRootProps()} onClick={(e)=>e.stopPropagation()}>
                  {file ? (
-                    <img src='https://img.freepik.com/premium-vector/pdf-icon-flat-style-document-text-vector-illustration-white-isolated-background-archive-business-concept_157943-463.jpg?size=626&ext=jpg' alt="" />
-                ) : ( 
+                    <>
+                    <div className='thumbnail'>
+                    <Document file={file} onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
+                        <Page pageNumber={firstPage} /> 
+                    </Document>
+                    </div>
+                  </>
+                    
+                      ) : ( 
                     <>
                         <img src={Books} alt="" />
                         <div className="preview-text">

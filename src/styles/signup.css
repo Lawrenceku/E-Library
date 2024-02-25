@@ -54,20 +54,11 @@
     position: relative;
     
 }
-#pwd1{
-    width: 100%;
-    position: relative;
-}
-#pwd2{
-
-}
-#password-icon{
-    display: inline-block;
+.password-icon{
     position: absolute;
     height: 20px;
     right: 5px;
-    margin-right: 0%;
-    right: 0;
+    top: 25%;
     z-index: 9999;
     
 }
