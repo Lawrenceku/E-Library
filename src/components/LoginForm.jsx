@@ -4,6 +4,9 @@ import { MyContext } from '../App';
 import { useRef, useContext, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
+import show from '../assets/eye.svg'
+import hide from '../assets/eye-slash.svg'
+
 
 const provider = new GoogleAuthProvider();
 
@@ -13,6 +16,9 @@ const LoginForm = ({ setSuccess }) => {
     const toastId = useRef(null);
     const app = useContext(MyContext);
     const auth = getAuth(app);
+    const [passwordIcon, setPasswordIcon] = useState(show)
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
     auth.languageCode = 'it';
 
     const googleAuth = () => {
@@ -67,7 +73,10 @@ const LoginForm = ({ setSuccess }) => {
                 });
             });
     };
-
+    const togglePasswordVisibility = ()=>{
+        setPasswordVisible(!passwordVisible)
+        passwordVisible? setPasswordIcon(show): setPasswordIcon(hide)
+    }
     return (
         <div className="signup-container">
             <div className="toast-container"><ToastContainer ref={toastId} limit={2} /></div>
@@ -76,7 +85,10 @@ const LoginForm = ({ setSuccess }) => {
             <p>OR</p>
             <form onSubmit={submit}>
                 <input onChange={(event) => setEmail(event.target.value)} placeholder='Email' type="email" />
-                <input onChange={(event) => setPassword(event.target.value)} placeholder='Password' type="password" name="" id="" />
+                <div className='password-container'>
+                    <input type={passwordVisible? 'text': 'password'} onChange={(event) => setPassword(event.target.value)} placeholder='Password' name="" id="" />
+                    <img className='password-icon' onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={passwordIcon} alt="" />
+                </div>
                 <input type="submit" value="Login" />
                 <p>Don't have an account? <Link to='/'>Create one</Link></p>
             </form>

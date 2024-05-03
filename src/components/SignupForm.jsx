@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 import show from '../assets/eye.svg'
+import hide from '../assets/eye-slash.svg'
 import { useEffect, useRef, useState, useContext } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, updateProfile ,GoogleAuthProvider,setPersistence, browserSessionPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { MyContext, dbContext, storageContext } from '../App';
@@ -22,6 +23,8 @@ const SignupForm = ({ setProgress }) => {
     const [validPassword, setValidPassword] = useState('');
     const [uid, setUid] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordIcon, setPasswordIcon] = useState(show)
+    const [confirmPasswordIcon, setConfirmPasswordIcon] = useState(show)
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const check = "https://png.monster/wp-content/uploads/2022/01/png.monster-457.png";
     const fail = "https://t3.ftcdn.net/jpg/05/38/50/02/360_F_538500243_CgDMCSwiAbFS1agn7yveGBy3qOeEStOT.png";
@@ -67,9 +70,21 @@ const SignupForm = ({ setProgress }) => {
      */
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
+        if (passwordVisible===true){
+            setPasswordIcon(show)
+        }
+        else {
+            setPasswordIcon(hide)
+        }
       };
       const toggleConfirmPasswordVisibility = () => {
         setConfirmPasswordVisible(!confirmPasswordVisible);
+        if (confirmPasswordVisible===true){
+            setConfirmPasswordIcon(show)
+        }
+        else {
+            setConfirmPasswordIcon(hide)
+        }
       };
     const googleAuth = async () => {
         try {
@@ -189,14 +204,14 @@ const SignupForm = ({ setProgress }) => {
                 <input required onChange={(event) => setEmail(event.target.value)} placeholder='Email address' type="email" />
                 <div className='password-container'>
                     <input required onChange={(event) => isStrongPassword(event.target.value)} placeholder='Password' type={passwordVisible ? 'text' : 'password'} name=""  id="pwd1" />
-                    <img className='password-icon' onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={show} alt="" />
+                    <img className='password-icon' onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={passwordIcon} alt="" />
                 </div>
                 <div id='password-requirements'>
                 <span >{/*Your password must be at least 8 characters long  and contain at least one lowercase letter, one uppercase letter, one digit. */}</span>
                 </div>
                 <div className='password-container'>
                     <input required onChange={(event)=>setConfirmPassword(event.target.value)  } placeholder='Confirm password' type={confirmPasswordVisible ? 'text' : 'password'} name="" id="pwd2" />
-                    <img className='password-icon' onClick={toggleConfirmPasswordVisibility} style={{cursor: 'pointer'}} src={show} alt="" />
+                    <img className='password-icon' onClick={toggleConfirmPasswordVisibility} style={{cursor: 'pointer'}} src={confirmPasswordIcon} alt="" />
                 </div>
                 
                 <input type="submit" value="Continue" />
