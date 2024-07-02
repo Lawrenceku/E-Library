@@ -16,7 +16,7 @@ const Book = ({ genre, title, description, imageURL }) => {
         <img src={imageURL} alt="" />
         </div>
         <div className="meta">
-            <div>
+            <div className='texts'>
             <p className="title">{title}</p>
             <p className="description">{description}</p>
             </div>

@@ -77,7 +77,6 @@
     height: 100%;
     width: 40%;
     display: flex;
-    background-color: red;
     align-items: center;
     padding: 5px;
 }
@@ -98,11 +97,14 @@
     border-radius: 20.09px;
     background: darkgray;
     height: fit-content;
+    width: fit-content;
 }
 
 .data{
     display: flex;
-    background-color: green;
+    flex-direction: column;
+    width: 100%;
+    gap: 40px;
 }
 
 .book .users {
@@ -130,7 +132,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: blue;
+    gap:7px;
 }
 .book .title {
     color: #2D2D2D;
