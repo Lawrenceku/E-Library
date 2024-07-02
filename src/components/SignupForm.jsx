@@ -26,10 +26,12 @@ const SignupForm = ({ setProgress }) => {
     const [passwordIcon, setPasswordIcon] = useState(show)
     const [confirmPasswordIcon, setConfirmPasswordIcon] = useState(show)
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    const [btnDisabled, setBtnDisabled ] = useState(true)
     const check = "https://png.monster/wp-content/uploads/2022/01/png.monster-457.png";
     const fail = "https://t3.ftcdn.net/jpg/05/38/50/02/360_F_538500243_CgDMCSwiAbFS1agn7yveGBy3qOeEStOT.png";
     const [iconUrl, setIconUrl] = useState('');
     const toastId = useRef(null);
+    const signUpBtn = useRef(null)
 /*     
     useEffect(()=>{
         setPersistence(auth, browserSessionPersistence)
@@ -129,9 +131,11 @@ const SignupForm = ({ setProgress }) => {
         if (password === confirmPassword) {
             setIconUrl(check)
             setValidPassword(password)
+            setBtnDisabled(false)
         } else {
             setIconUrl(fail)
             setValidPassword(null)
+            setBtnDisabled(true)
         }
     }, [password, confirmPassword]);
 
@@ -214,7 +218,7 @@ const SignupForm = ({ setProgress }) => {
                     <img className='password-icon' onClick={toggleConfirmPasswordVisibility} style={{cursor: 'pointer'}} src={confirmPasswordIcon} alt="" />
                 </div>
                 
-                <input type="submit" value="Continue" />
+                <input disabled={btnDisabled} style={btnDisabled ? { cursor: 'not-allowed', backgroundColor:'gray'} : {cursor: 'pointer' }}  ref={signUpBtn} type="submit" value="Continue" />
                 <p>Already have an account? <Link to='/login'>Log in</Link></p>
             </form>
         </div>

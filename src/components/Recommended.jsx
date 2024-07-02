@@ -66,7 +66,6 @@ const Recommended = () => {
 
     return (
        <div className="bookshelf">
-        <p className="title">Recommended</p>
         <div className="categories">
             <span>History</span>
             <span>Science</span>

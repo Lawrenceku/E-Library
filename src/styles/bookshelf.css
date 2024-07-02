@@ -23,6 +23,9 @@
 }
 .book-row {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
     flex-wrap: wrap;
     gap: 10px;
     
@@ -41,7 +44,7 @@
     border-radius: 5px 5px 0px 0px;
 }
 .book .preview img {
-    width: 100%;    
+    width: auto;    
 
 }
 .book .meta {

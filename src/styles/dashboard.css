@@ -6,3 +6,29 @@
     margin-left: 350px;
     width: calc(100% - 350px);
 }
+
+#tab-nav{
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    font-size: large;
+}
+
+#tab-nav button{
+    margin: 3%;
+    font-weight: 600;
+    font-size: large;
+    background: none;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+.line{
+    width: 100%;
+    height: 3px;
+    background-color: black;
+    border-radius: 100px;
+    display: block;
+    transition: 3s;
+}

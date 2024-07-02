@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../styles/signup.css';
 import { MyContext } from '../App';
-import { useRef, useContext, useState } from 'react';
+import { useRef, useContext, useState, useEffect } from 'react';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import show from '../assets/eye.svg'
@@ -18,9 +18,19 @@ const LoginForm = ({ setSuccess }) => {
     const auth = getAuth(app);
     const [passwordIcon, setPasswordIcon] = useState(show)
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [btnDisabled, setBtnDisabled] = useState(true)
+    const signUpBtn = useRef(null)
 
     auth.languageCode = 'it';
 
+    useEffect(()=>{
+        if (!email || !password || email =='' || password == '' || email== ' ' || password ==' '){
+            setBtnDisabled(true)
+        }
+        else{
+            setBtnDisabled(false)
+        }
+    },[email,password])
     const googleAuth = () => {
         signInWithPopup(auth, provider)
             .then((result) => {
@@ -89,7 +99,7 @@ const LoginForm = ({ setSuccess }) => {
                     <input type={passwordVisible? 'text': 'password'} onChange={(event) => setPassword(event.target.value)} placeholder='Password' name="" id="" />
                     <img className='password-icon' onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={passwordIcon} alt="" />
                 </div>
-                <input type="submit" value="Login" />
+                <input disabled={btnDisabled} style={btnDisabled ? { cursor: 'not-allowed', backgroundColor:'gray'} : {cursor: 'pointer' }}  ref={signUpBtn} type="submit" value="Login" />
                 <p>Don't have an account? <Link to='/'>Create one</Link></p>
             </form>
         </div>

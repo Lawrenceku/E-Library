@@ -37,7 +37,6 @@ const Read = ({ rank, image }) => {
 const TopRead = () => {
     return (
         <div className="topread">
-            <p className="title">Top read</p>
             <div className="top-read-row">
                 {readList.map((read, idx) => (
                     <Read

@@ -35,8 +35,10 @@ const Book = ({ genre, title, description, fileURL, imageURL }) => {
                 </span>
             </div>
         </div>
+        <div>
         <p className="title">{title}</p>
         <p className="description">{description}</p>
+        </div>
     </div>
    );
 };
@@ -82,7 +84,6 @@ const Bookshelf = () => {
 
     return (
        <div className="bookshelf">
-        <p className="title">My bookshelf</p>
         <div className="categories">
             <span>All</span>
             <span>Science</span>

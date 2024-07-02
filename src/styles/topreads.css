@@ -7,7 +7,10 @@
 }
 .top-read-row {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
     gap: 25px;
 }
 .topread .read {
