@@ -100,7 +100,7 @@ const LoginForm = ({ setSuccess }) => {
                     <img className='password-icon' onClick={togglePasswordVisibility} style={{cursor: 'pointer'}} src={passwordIcon} alt="" />
                 </div>
                 <input disabled={btnDisabled} style={btnDisabled ? { cursor: 'not-allowed', backgroundColor:'gray'} : {cursor: 'pointer' }}  ref={signUpBtn} type="submit" value="Login" />
-                <p>Don't have an account? <Link to='/'>Create one</Link></p>
+                <p>Don't have an account? <Link to='/signup'>Create one</Link></p>
             </form>
         </div>
     );

@@ -14,7 +14,7 @@ const Header = ({ title }) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
             if (!user) {
-                navigate('/');
+                navigate('/signup');
             }
         });
 

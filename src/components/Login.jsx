@@ -12,7 +12,7 @@ const Login = () => {
 
     useEffect(() => {
         if (success == true) {
-            navigate('/dashboard');
+            navigate('/');
         }
     }, [success])
 

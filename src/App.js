@@ -55,9 +55,9 @@ function App() {
         <storageContext.Provider value={storage}>
         <AuthContext.Provider value={currentUser}>
         <Routes>
-        <Route path="/" element={<Signup />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/publish" element={<PublishBook />} />
           <Route path="/community" element={<Community />} />
           <Route path="/book" element={<BookDetail />} />

@@ -1,5 +1,32 @@
 .bookshelf {
     padding: 20px;
+    margin: 10px;
+    max-height: 80%;
+    overflow-y: scroll;
+}
+.bookshelf::-webkit-scrollbar {
+    width: 10px;
+    margin: 10px;
+}
+
+.bookshelf::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+.bookshelf::-webkit-scrollbar-thumb:hover {
+    background-color: gray;
+    border-radius: 10px;
+}
+
+.bookshelf::-webkit-scrollbar-track {
+    /* background-color: #f1f1f1; */
+    border-radius: 10px;
+}
+
+.error-message{
+    font-size: 50px;
+    font-weight: bolder;
 }
 .bookshelf .title {
     font-size: 32px;
@@ -8,6 +35,7 @@
 }
 .bookshelf .categories {
     display: flex;
+    justify-content: center;
     gap: 10px;
 }
 .bookshelf .categories span {
@@ -32,32 +60,51 @@
     margin-top: 30px;
 }
 .book {
+    display: flex;
     flex: 0 1 300px;
-
+    width: 60%;
+    padding: 10px;
+    background-color: whitesmoke;
+    border-radius: 50px;
+    margin-top: 3%;
+    transition: 300ms;
+}
+.book:hover{
+    background-color: lightgray;
+    transform: scale(105%);
 }
 .book .preview {
-    position: relative;
-    height: 78%;
-    background-color: #D3D3D3;
+    height: 100%;
+    width: 40%;
     display: flex;
+    background-color: red;
     align-items: center;
-    border-radius: 5px 5px 0px 0px;
+    padding: 5px;
 }
 .book .preview img {
-    width: auto;    
-
+    width: 100%;    
+    border-radius: 10px;
 }
 .book .meta {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     padding: 15px 0px;
 }
-.book .meta .category, .book .meta .user-rating                                                                                                                                                                                                                                                                             {
+.book .meta .category, .book .meta .users-rating{
     padding: 6px 25px;
     gap: 10px;
     border-radius: 20.09px;
-    background: #EFEFEF;
+    background: darkgray;
+    height: fit-content;
 }
+
+.data{
+    display: flex;
+    background-color: green;
+}
+
 .book .users {
     display: flex;
     align-items: center;
@@ -76,6 +123,14 @@
     gap: 8px;
     border-radius: 5px;
     background: #FAFAFA;
+}
+.texts{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
 }
 .book .title {
     color: #2D2D2D;

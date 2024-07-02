@@ -11,11 +11,16 @@ const Book = ({ genre, title, description, imageURL }) => {
     const users = '99+';
     const rating = 4;
     return (
-        <div className="book">
+        <div style={{cursor:'pointer'}} className="book">
         <div className="preview">
         <img src={imageURL} alt="" />
         </div>
         <div className="meta">
+            <div>
+            <p className="title">{title}</p>
+            <p className="description">{description}</p>
+            </div>
+            <div className='data'>
             <span className='category'>{genre}</span>
             <div className="users-rating">
                 <span className='users'>
@@ -27,9 +32,8 @@ const Book = ({ genre, title, description, imageURL }) => {
                     {rating}
                 </span>
             </div>
+            </div>
         </div>
-        <p className="title">{title}</p>
-        <p className="description">{description}</p>
     </div>
    );
 };
@@ -73,6 +77,7 @@ const Recommended = () => {
             <span>+</span>
         </div>
         <ClipLoader
+
             color={color}
             loading={loading}
             cssOverride={override}
@@ -80,6 +85,7 @@ const Recommended = () => {
             aria-label="Loading Spinner"
             data-testid="loader"
         />
+                {/* <p className='error-message'>Oops... we ran into an error while loading your books</p> */}
         <div className="book-row">
             {books.map((book) => (
                 <Book

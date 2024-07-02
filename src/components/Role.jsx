@@ -8,7 +8,7 @@ const Role = () => {
     const submit = (e) => {
         e.preventDefault();
         // Firebase backend logic
-        navigate('/dashboard');
+        navigate('/');
     };
 
     return (
