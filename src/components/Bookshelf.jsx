@@ -15,14 +15,16 @@ const Book = ({ genre, title, description, fileURL, imageURL }) => {
     const rating = 4;
     console.log(fileURL)
     return (
-        <div className="book">
+        <div style={{cursor:'pointer'}} className="book">
         <div className="preview">
-            <img src={imageURL} alt="" />
-{/*             <Document  file={{url : 'https://firebasestorage.googleapis.com/v0/b/toshokan-6efd1.appspot.com/o/toshokanBooks%2FHO3tDoOtD8g9Md732ayF?alt=media&token=d62c6a18-0151-4c56-b2bc-3d66bb3640a0',}}  onLoadSuccess={({numPages})=>setPagesNumber(numPages)}>
-                <Page pageNumber={firstPage} /> 
-            </Document>
- */}        </div>
+        <img src={imageURL} alt="" />
+        </div>
         <div className="meta">
+            <div className='texts'>
+            <p className="title">{title}</p>
+            <p className="description">{description}</p>
+            </div>
+            <div className='data'>
             <span className='category'>{genre}</span>
             <div className="users-rating">
                 <span className='users'>
@@ -34,10 +36,7 @@ const Book = ({ genre, title, description, fileURL, imageURL }) => {
                     {rating}
                 </span>
             </div>
-        </div>
-        <div>
-        <p className="title">{title}</p>
-        <p className="description">{description}</p>
+            </div>
         </div>
     </div>
    );
