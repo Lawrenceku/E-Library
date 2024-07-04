@@ -51,7 +51,7 @@ const Sidebar = () => {
                     <img src={AIIcon} alt="" />
                 </div>
                 <p className='title'>Personalised AI</p>
-                <p className='content'>Lorem ipsum dolor sit amet consectetur. At sed tempus purus enim at.</p>
+                <p className='content'>Discover tailored learning paths, get instant assistance, and enjoy enhanced accessibility with our AI-powered tutor.</p>
                 <a href="/">Try for free</a>
             </div>
         </div>

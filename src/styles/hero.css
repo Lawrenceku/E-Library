@@ -9,7 +9,7 @@
     background: linear-gradient(110deg, #1A0F2D 8%, #2B1F3E 18%, #180E29 33%);
     border-radius: 5px;
     background-size: 200% 100%;
-    animation: 2.5s shine linear infinite;
+    animation: 2.5s 4s shine linear infinite;
 
 }
 .hero .title {
@@ -26,7 +26,8 @@
 .img{
     height: 200px;
     filter: brightness(1.2);
-    transform: rotateZ(-5deg);
+    transform: rotateZ(-5deg) translate(30%,3%);
+    ;
 }
 @keyframes shine {
     to {

@@ -22,10 +22,12 @@ header {
     padding: 15.5px 19px;
     width: 350px;
     align-items: center;
+    justify-content: center;
     border-radius: 87px;
     border: 1px solid #E1E1E1;
     background: #FCFCFC;
 }
+
 .actions input {
     margin-left: 15px;
     border: none;
@@ -33,6 +35,8 @@ header {
     outline: none;
     width: 90%;
     box-sizing: border-box;
+    font-size: large;
+    letter-spacing: 1px;
 }
 .actions .user {
     border-radius: 100%;
