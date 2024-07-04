@@ -24,7 +24,7 @@ const Sidebar = () => {
             <ul className="links">
                 <li className='active'>
                     <img src={HomeIcon} alt="" />
-                    <Link to="/dashboard">Home</Link>
+                    <Link to="/">Home</Link>
                 </li>
                 <li>
                     <img src={SearchIcon} alt="" />
