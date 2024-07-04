@@ -2,10 +2,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0px 0px 0px 20px;
     margin: 20px;
     border-radius: 7px;
     background: #180E29;
+    background: linear-gradient(110deg, #1A0F2D 8%, #2B1F3E 18%, #180E29 33%);
+    border-radius: 5px;
+    background-size: 200% 100%;
+    animation: 2.5s shine linear infinite;
+
 }
 .hero .title {
     font-size: 30px;
@@ -19,6 +24,13 @@
     font-weight: 400;
 }
 .img{
-    height: 150px;
-    
+    height: 200px;
+    filter: brightness(1.2);
+    transform: rotateZ(-5deg);
 }
+@keyframes shine {
+    to {
+      background-position-x: -200%;
+    }
+  }
+  
