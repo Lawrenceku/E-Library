@@ -86,6 +86,7 @@ const Recommended = () => {
             data-testid="loader"
         />
                 {/* <p className='error-message'>Oops... we ran into an error while loading your books</p> */}
+        <div className='row-container'>
         <div className="book-row">
             {books.map((book) => (
                 <Book
@@ -97,6 +98,7 @@ const Recommended = () => {
 
                 />
             ))}
+        </div>
         </div>
     </div>
     );
