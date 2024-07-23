@@ -97,6 +97,7 @@ const Bookshelf = () => {
             aria-label="Loading Spinner"
             data-testid="loader"
         />
+                <div className='row-container'>
         <div className="book-row">
             {books.map((book) => (
                 <Book
@@ -109,6 +110,7 @@ const Bookshelf = () => {
 
                 />
             ))}
+        </div>
         </div>
     </div>
     );
